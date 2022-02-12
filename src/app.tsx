@@ -8,6 +8,8 @@ import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { BookOutlined } from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
+import { ApolloProvider } from '@apollo/client';
+import apolloClient from './services/apollo';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -55,9 +57,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
-    waterMarkProps: {
-      content: initialState?.currentUser?.name,
-    },
+    // waterMarkProps: {
+    //   content: initialState?.currentUser?.name,
+    // },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
@@ -81,21 +83,21 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     childrenRender: (children, props) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
-        <>
+        <ApolloProvider client={apolloClient}>
           {children}
           {!props.location?.pathname?.includes('/login') && (
             <SettingDrawer
               enableDarkTheme
               settings={initialState?.settings}
               onSettingChange={(settings) => {
-                setInitialState((preInitialState) => ({
+                setInitialState((preInitialState: any) => ({
                   ...preInitialState,
                   settings,
                 }));
               }}
             />
           )}
-        </>
+        </ApolloProvider>
       );
     },
     ...initialState?.settings,

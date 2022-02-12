@@ -1,0 +1,44 @@
+mutation AuthUser($loginInput: LoginInput!) {
+  login(data: $loginInput) {
+    ...AuthTokens
+  }
+}
+
+mutation AddUser($input: SignupInput!) {
+  signup(data: $input) {
+    ...AuthTokens
+  }
+}
+
+mutation Logout($refreshToken: String!) {
+  logout(token: $refreshToken) {
+    message
+  }
+}
+
+mutation RefreshToken($token: String!) {
+  refreshToken(token: $token) {
+    ...TokenData
+  }
+}
+
+fragment UserData on User {
+  id
+  email
+  college
+  name
+  roles
+}
+
+fragment AuthTokens on Auth {
+  accessToken
+  refreshToken
+  user {
+    ...UserData
+  }
+}
+
+fragment TokenData on Token {
+  accessToken
+  refreshToken
+}
