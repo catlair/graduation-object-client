@@ -7,7 +7,6 @@ import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import styles from './index.less';
-import { useAuthUserMutation } from '@/graphql';
 import type { LoginInput } from './interface';
 import isEmail from 'validator/lib/isEmail';
 import isNumeric from 'validator/lib/isNumeric';
@@ -29,7 +28,6 @@ const Login: React.FC = () => {
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
-  const [authUser] = useAuthUserMutation();
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
@@ -53,11 +51,6 @@ const Login: React.FC = () => {
       loginInput.id = Number(values.username);
     }
     try {
-      const { data } = await authUser({
-        variables: { loginInput },
-      });
-      console.log(data);
-
       // 登录
       const msg = await login({ ...values, type });
 

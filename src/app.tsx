@@ -8,8 +8,6 @@ import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { BookOutlined } from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
-import { ApolloProvider } from '@apollo/client';
-import apolloClient from './services/apollo';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -83,7 +81,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     childrenRender: (children, props) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
-        <ApolloProvider client={apolloClient}>
+        <>
           {children}
           {!props.location?.pathname?.includes('/login') && (
             <SettingDrawer
@@ -97,7 +95,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
               }}
             />
           )}
-        </ApolloProvider>
+        </>
       );
     },
     ...initialState?.settings,

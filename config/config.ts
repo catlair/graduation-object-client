@@ -58,15 +58,6 @@ export default defineConfig({
     type: 'none',
   },
   mfsu: {},
-  chainWebpack(memo) {
-    // 使用 graphql loader
-    memo.module
-      .rule('graphql')
-      .test(/\.(graphql|gql)$/)
-      .use('graphql-tag/loader')
-      .loader('graphql-tag/loader')
-      .end();
-  },
   webpack5: {},
   exportStatic: {},
 });
