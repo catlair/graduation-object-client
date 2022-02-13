@@ -9,19 +9,31 @@ enum Role {
   ViceDirector = 'VICE_DIRECTOR',
 }
 
+interface ErrorInfoStructure<T = any> {
+  success: boolean; // if request is success
+  data?: T; // response data
+  errorCode?: string; // code for errorType
+  errorMessage?: string; // message display to user
+  showType?: number; // error display type： 0 silent; 1 message.warn; 2 message.error; 4 notification; 9 page
+  traceId?: string; // Convenient for back-end Troubleshooting: unique request ID
+  host?: string; // Convenient for backend Troubleshooting: host of current access server
+}
+
+interface RequestError extends Error {
+  data?: any; // 这里是后端返回的原始数据
+  info?: ErrorInfoStructure;
+}
+
 declare namespace API {
-  type CurrentUser = {
-    id: number;
-    name?: string;
-    email?: string;
-    roles?: Role[] | null;
-    collge?: string;
+  type CurrentUser = User;
+
+  type TokenResult = {
+    accessToken?: string;
+    refreshToken?: string;
   };
 
-  type LoginResult = {
-    status?: string;
-    type?: string;
-    currentAuthority?: string;
+  type LoginResult = TokenResult & {
+    user?: User;
   };
 
   type PageParams = {
@@ -51,15 +63,18 @@ declare namespace API {
     success?: boolean;
   };
 
-  type FakeCaptcha = {
-    code?: number;
-    status?: string;
+  type EmailCaptcha = {
+    name?: string;
+    email: string;
+    createdAt: string;
   };
 
   type LoginParams = {
-    username?: string;
+    username?: string | number;
     password?: string;
     autoLogin?: boolean;
+    email?: string;
+    captcha?: string;
     type?: string;
   };
 

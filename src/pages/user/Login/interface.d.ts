@@ -1,5 +1,9 @@
 export interface LoginInput {
-  id?: number;
   password: string;
+  username: string | number;
+}
+
+export interface LoginEmailInput {
   email?: string;
+  code?: string;
 }

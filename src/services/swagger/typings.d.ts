@@ -19,14 +19,12 @@ declare namespace API {
 
   type User = {
     id?: number;
-    username?: string;
-    firstName?: string;
-    lastName?: string;
     email?: string;
-    password?: string;
-    phone?: string;
-    /** User Status */
-    userStatus?: number;
+    name?: string;
+    college?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    roles?: string[];
   };
 
   type Tag = {

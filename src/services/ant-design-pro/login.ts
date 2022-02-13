@@ -2,20 +2,32 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 发送验证码 POST /api/login/captcha */
-export async function getFakeCaptcha(
-  params: {
-    // query
-    /** 手机号 */
-    phone?: string;
+/** 发送邮箱验证码 POST /email/captcha */
+export async function getEmailCaptcha(
+  data: {
+    email: string;
+    name?: string;
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.FakeCaptcha>('/api/login/captcha', {
-    method: 'GET',
-    params: {
-      ...params,
-    },
+  return request<API.EmailCaptcha>('/email/captcha', {
+    method: 'POST',
+    data,
+    ...(options || {}),
+  });
+}
+
+/** 发送邮箱验证码 POST /auth/login/email */
+export async function loginByEmail(
+  data: {
+    email: string;
+    code: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<API.LoginResult>('/auth/login/email', {
+    method: 'POST',
+    data,
     ...(options || {}),
   });
 }

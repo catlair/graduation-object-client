@@ -1,15 +1,13 @@
-import { LockOutlined, MobileOutlined, UserOutlined } from '@ant-design/icons';
+import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
 import { history, useModel } from 'umi';
 import Footer from '@/components/Footer';
-import { login } from '@/services/ant-design-pro/api';
-import { getFakeCaptcha } from '@/services/ant-design-pro/login';
+import { getEmailCaptcha } from '@/services/ant-design-pro/login';
 import styles from './index.less';
-import type { LoginInput } from './interface';
-import isEmail from 'validator/lib/isEmail';
-import isNumeric from 'validator/lib/isNumeric';
+import { setTokens } from '@/utils/token';
+import { validatorLogin } from './utils';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -25,60 +23,45 @@ const LoginMessage: React.FC<{
 );
 
 const Login: React.FC = () => {
-  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
+  const [userLoginState, setUserLoginState] = useState({ status: '', errorMessage: '' });
   const [type, setType] = useState<string>('account');
-  const { initialState, setInitialState } = useModel('@@initialState');
-
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-
-    if (userInfo) {
-      await setInitialState((s) => ({ ...s, currentUser: userInfo }));
-    }
-  };
+  const { setInitialState } = useModel('@@initialState');
 
   const handleSubmit = async (values: API.LoginParams) => {
-    const loginInput: LoginInput = { password: '' };
-    if (!values.password || !values.username) {
-      message.error('请输入用户信息');
-      return;
-    } else {
-      loginInput.password = values.password;
-    }
-    if (isEmail(values.username)) {
-      loginInput.email = values.username;
-    } else if (isNumeric(values.username)) {
-      loginInput.id = Number(values.username);
-    }
     try {
       // 登录
-      const msg = await login({ ...values, type });
+      const data = await validatorLogin({ ...values, type });
 
-      if (msg.status === 'ok') {
-        const defaultLoginSuccessMessage = '登录成功！';
-        message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
-        /** 此方法会跳转到 redirect 参数所在的位置 */
-
-        if (!history) return;
-        const { query } = history.location;
-        const { redirect } = query as {
-          redirect: string;
-        };
-        history.push(redirect || '/');
+      if (!data) {
+        message.error('登录失败，请重试！');
         return;
       }
 
-      console.log(msg); // 如果失败去设置用户错误信息
+      message.success('登录成功！');
+      setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
+      await setInitialState((s: any) => ({ ...s, currentUser: data.user }));
 
-      setUserLoginState(msg);
+      /** 此方法会跳转到 redirect 参数所在的位置 */
+      if (!history) return;
+      const { query } = history.location;
+      const { redirect } = query as {
+        redirect: string;
+      };
+
+      history.push(redirect || '/');
+      return;
     } catch (error) {
-      const defaultLoginFailureMessage = '登录失败，请重试！';
-      message.error(defaultLoginFailureMessage);
+      const { message: msg, name } = error as RequestError;
+      if (name === 'BizError') {
+        setUserLoginState({ status: 'error', errorMessage: msg });
+      } else {
+        console.log(error);
+        message.error('登录失败，请重试！');
+      }
     }
   };
 
-  const { status, type: loginType } = userLoginState;
+  const { status, errorMessage } = userLoginState;
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -101,12 +84,10 @@ const Login: React.FC = () => {
         >
           <Tabs activeKey={type} onChange={setType}>
             <Tabs.TabPane key="account" tab={'账户密码登录'} />
-            <Tabs.TabPane key="mobile" tab={'邮箱验证登录'} />
+            <Tabs.TabPane key="email" tab={'邮箱验证登录'} />
           </Tabs>
 
-          {status === 'error' && loginType === 'account' && (
-            <LoginMessage content={'错误的用户名和密码(admin/123456)'} />
-          )}
+          {status === 'error' && type === 'account' && <LoginMessage content={errorMessage} />}
           {type === 'account' && (
             <>
               <ProFormText
@@ -140,15 +121,15 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
-          {type === 'mobile' && (
+          {status === 'error' && type === 'email' && <LoginMessage content={errorMessage} />}
+          {type === 'email' && (
             <>
               <ProFormText
                 fieldProps={{
                   size: 'large',
-                  prefix: <MobileOutlined className={styles.prefixIcon} />,
+                  prefix: <MailOutlined className={styles.prefixIcon} />,
                 }}
-                name="mobile"
+                name="email"
                 placeholder={'请输入邮箱账号！'}
                 rules={[
                   {
@@ -174,26 +155,23 @@ const Login: React.FC = () => {
                   if (timing) {
                     return `${count} ${'秒后重新获取'}`;
                   }
-
                   return '获取验证码';
                 }}
                 name="captcha"
+                phoneName="email"
                 rules={[
                   {
                     required: true,
                     message: '验证码是必填项！',
                   },
                 ]}
-                onGetCaptcha={async (phone) => {
-                  const result = await getFakeCaptcha({
-                    phone,
-                  });
-
-                  if (result === false) {
-                    return;
+                onGetCaptcha={async (email) => {
+                  try {
+                    await getEmailCaptcha({ email });
+                    message.success('获取验证码成功！');
+                  } catch (error) {
+                    console.log(error);
                   }
-
-                  message.success('获取验证码成功！验证码为：1234');
                 }}
               />
             </>

@@ -1,31 +1,40 @@
 import { request } from 'umi';
 
-/** 获取当前的用户 GET /api/currentUser */
+/** 获取当前的用户 GET /currentUser */
 export async function currentUser(options?: Record<string, any>) {
-  return request<{
-    data: API.CurrentUser;
-  }>('/api/currentUser', {
+  return request<API.CurrentUser>('/user/me', {
     method: 'GET',
     ...(options || {}),
   });
 }
 
-/** 退出登录接口 POST /api/login/outLogin */
-export async function outLogin(options?: Record<string, any>) {
-  return request<Record<string, any>>('/api/login/outLogin', {
-    method: 'POST',
+/** 退出登录接口 POST /auth/logout */
+export async function outLogin(token: string, options?: Record<string, any>) {
+  return request<Record<string, any>>('/auth/logout', {
+    method: 'DELETE',
+    data: {
+      token,
+    },
     ...(options || {}),
   });
 }
 
-/** 登录接口 POST /api/login/account */
+/** 登录接口 POST /login/account */
 export async function login(body: API.LoginParams, options?: Record<string, any>) {
-  return request<API.LoginResult>('/api/login/account', {
+  return request<API.LoginResult>('/auth/login', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     data: body,
+    ...(options || {}),
+  });
+}
+
+/** 刷新 accessToken /auth/token/refresh */
+export async function refreshToken(token: string, options?: Record<string, any>) {
+  return request<API.TokenResult>('/auth/token/refresh', {
+    method: 'PUT',
+    data: {
+      token: token,
+    },
     ...(options || {}),
   });
 }
