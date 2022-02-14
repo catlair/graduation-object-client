@@ -43,6 +43,7 @@ export async function refreshToken(token: string, options?: Record<string, any>)
 export async function getNotices(options?: Record<string, any>) {
   return request<API.NoticeIconList>('/api/notices', {
     method: 'GET',
+    prefix: '',
     ...(options || {}),
   });
 }
@@ -63,6 +64,7 @@ export async function rule(
     params: {
       ...params,
     },
+    prefix: '',
     ...(options || {}),
   });
 }
@@ -71,6 +73,7 @@ export async function rule(
 export async function updateRule(options?: Record<string, any>) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'PUT',
+    prefix: '',
     ...(options || {}),
   });
 }
@@ -79,6 +82,7 @@ export async function updateRule(options?: Record<string, any>) {
 export async function addRule(options?: Record<string, any>) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'POST',
+    prefix: '',
     ...(options || {}),
   });
 }
@@ -87,6 +91,7 @@ export async function addRule(options?: Record<string, any>) {
 export async function removeRule(options?: Record<string, any>) {
   return request<Record<string, any>>('/api/rule', {
     method: 'DELETE',
+    prefix: '',
     ...(options || {}),
   });
 }
