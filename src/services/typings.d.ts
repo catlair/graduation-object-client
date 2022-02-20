@@ -27,6 +27,35 @@ interface RequestError extends Error {
 declare namespace API {
   type CurrentUser = User;
 
+  type SvgCaptcha = {
+    img: string;
+    key: string;
+  };
+
+  type College = {
+    id: number;
+    name: string;
+  };
+
+  type CreatePaperParams = {
+    college: string;
+    remark?: string;
+    course: string;
+  };
+
+  type Paper = {
+    id: string;
+    course: string;
+    college: string;
+    teacherId: number;
+    remark?: string;
+    status: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+
+  type UploadPaperParams = Partial<Omit<CreatePaperParams, 'remark'>>;
+
   type TokenResult = {
     accessToken?: string;
     refreshToken?: string;

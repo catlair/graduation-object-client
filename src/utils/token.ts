@@ -1,4 +1,4 @@
-import { refreshToken } from '@/services/ant-design-pro/api';
+import { refreshToken } from '@/services/login';
 import SecureLS from 'secure-ls';
 
 const ls = new SecureLS({ encodingType: 'aes', encryptionSecret: 'sadskladjhk' });

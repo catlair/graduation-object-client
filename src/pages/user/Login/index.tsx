@@ -1,13 +1,14 @@
 import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
-import { Alert, message, Tabs } from 'antd';
+import { Alert, Form, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
 import { history, useModel } from 'umi';
 import Footer from '@/components/Footer';
-import { getEmailCaptcha } from '@/services/ant-design-pro/login';
+import { getEmailCaptcha } from '@/services/login';
 import styles from './index.less';
 import { setTokens } from '@/utils/token';
 import { validatorLogin } from './utils';
+import CaptchaInput from './components/CaptchaInput';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -118,6 +119,19 @@ const Login: React.FC = () => {
                   },
                 ]}
               />
+              <Form.Item
+                name="captcha"
+                rules={[
+                  {
+                    validateTrigger: 'onBlur',
+                    validator: async (rule, value) => {
+                      console.log(rule);
+                    },
+                  },
+                ]}
+              >
+                <CaptchaInput />
+              </Form.Item>
             </>
           )}
 

@@ -1,1 +1,1 @@
-export const uploadPaperFields = ['paperA', 'paperB'];
+export const uploadPaperFields = ['a', 'b'];

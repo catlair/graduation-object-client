@@ -1,5 +1,4 @@
-import { login } from '@/services/ant-design-pro/api';
-import { loginByEmail } from '@/services/ant-design-pro/login';
+import { loginByEmail, login } from '@/services/login';
 import { message } from 'antd';
 import isEmail from 'validator/lib/isEmail';
 import isNumeric from 'validator/lib/isNumeric';

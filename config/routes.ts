@@ -19,10 +19,14 @@ export default [
     ],
   },
   {
-    path: '/welcome',
+    path: '/',
+    redirect: '/Workplace',
+  },
+  {
+    path: '/workplace',
     name: '欢迎',
     icon: 'smile',
-    component: './Welcome',
+    component: './Workplace',
   },
   {
     path: '/admin',
@@ -35,7 +39,7 @@ export default [
         path: '/admin/sub-page',
         name: '二级管理页',
         icon: 'smile',
-        component: './Welcome',
+        component: './Workplace',
       },
       {
         component: './404',
@@ -43,20 +47,47 @@ export default [
     ],
   },
   {
-    name: '查询表格',
+    access: 'canTeacher',
+    name: '试卷管理',
     icon: 'table',
-    path: '/list',
-    component: './TableList',
+    path: '/papper',
+    routes: [
+      {
+        name: '试卷列表',
+        icon: 'smile',
+        path: '/papper/list',
+        component: './papper/List',
+      },
+      {
+        name: '上传试卷',
+        icon: 'smile',
+        path: '/papper/create',
+        component: './papper/Create',
+      },
+      {
+        name: '试卷编辑',
+        icon: 'smile',
+        path: '/papper/edit/:id',
+        component: './papper/Edit',
+        hideInMenu: true,
+      },
+      {
+        component: './404',
+      },
+    ],
   },
   {
-    path: '/',
-    redirect: '/welcome',
-  },
-  {
-    name: '空白页面',
+    access: 'canDirectors',
+    name: '试卷审核',
     icon: 'smile',
-    path: '/edit',
-    component: './Edit',
+    path: '/check',
+    component: './Check',
+  },
+  {
+    name: '个人设置',
+    icon: 'smile',
+    path: '/accountsettings',
+    component: './AccountSettings',
   },
   {
     component: './404',
