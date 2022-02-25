@@ -3,7 +3,7 @@ import SecureLS from 'secure-ls';
 
 const ls = new SecureLS({ encodingType: 'aes', encryptionSecret: 'sadskladjhk' });
 
-export const getAccessToken = () => {
+export const getAccessToken = (): string => {
   return ls.get('user-token')?.accessToken;
 };
 export const getRefreshToken = () => {

@@ -40,3 +40,33 @@ export async function uploadPaperUpdate(
     ...(options || {}),
   });
 }
+
+/** 上传图片 POST /upload/picture */
+export async function uploadPicture(file: FormData, options?: Record<string, any>) {
+  return request(`/upload/picture`, {
+    method: 'POST',
+    body: file,
+    ...(options || {}),
+  });
+}
+/** 删除图片 DELETE /upload/picture */
+export async function deletePicture(path: string, options?: Record<string, any>) {
+  return request(`/upload/picture/${path}`, {
+    method: 'DELETE',
+    ...(options || {}),
+  });
+}
+
+/** 获取 pdf 文件 GET /upload/${path}/${name} */
+export async function getFile(
+  name: string,
+  path: 'paper' | 'img' = 'paper',
+  options?: Record<string, any>,
+) {
+  return request(`/upload/${path}/${name}`, {
+    method: 'GET',
+    ...(options || {}),
+    responseType: 'blob',
+    noTransform: true,
+  });
+}

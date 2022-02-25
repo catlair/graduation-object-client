@@ -20,7 +20,7 @@ export default [
   },
   {
     path: '/',
-    redirect: '/Workplace',
+    redirect: '/workplace',
   },
   {
     path: '/workplace',
@@ -36,8 +36,8 @@ export default [
     component: './Admin',
     routes: [
       {
-        path: '/admin/sub-page',
-        name: '二级管理页',
+        path: '/admin/add-user',
+        name: '添加用户',
         icon: 'smile',
         component: './Workplace',
       },
@@ -50,25 +50,29 @@ export default [
     access: 'canTeacher',
     name: '试卷管理',
     icon: 'table',
-    path: '/papper',
+    path: '/paper',
     routes: [
+      {
+        path: '/paper',
+        redirect: '/paper/list',
+      },
       {
         name: '试卷列表',
         icon: 'smile',
-        path: '/papper/list',
-        component: './papper/List',
+        path: '/paper/list',
+        component: './paper/List',
       },
       {
         name: '上传试卷',
         icon: 'smile',
-        path: '/papper/create',
-        component: './papper/Create',
+        path: '/paper/create',
+        component: './paper/Create',
       },
       {
         name: '试卷编辑',
         icon: 'smile',
-        path: '/papper/edit/:id',
-        component: './papper/Edit',
+        path: '/paper/edit/:id',
+        component: './paper/Edit',
         hideInMenu: true,
       },
       {
@@ -81,13 +85,71 @@ export default [
     name: '试卷审核',
     icon: 'smile',
     path: '/check',
-    component: './Check',
+    routes: [
+      {
+        path: '/check',
+        redirect: '/check/list',
+      },
+      {
+        name: '试卷列表',
+        icon: 'smile',
+        path: '/check/list',
+        component: './check/List',
+      },
+      {
+        name: '试卷审核',
+        icon: 'smile',
+        path: '/check/operation/:id',
+        component: './check/Operation',
+        hideInMenu: true,
+      },
+      {
+        component: './404',
+      },
+    ],
   },
   {
     name: '个人设置',
     icon: 'smile',
-    path: '/accountsettings',
-    component: './AccountSettings',
+    path: '/settings',
+    component: './settings',
+    routes: [
+      {
+        name: '更换邮箱',
+        icon: 'smile',
+        path: '/settings/list',
+        component: './settings/Email',
+        hideInMenu: true,
+      },
+      {
+        name: '修改密码',
+        icon: 'smile',
+        path: '/settings/operation/:id',
+        component: './settings/Password',
+        hideInMenu: true,
+      },
+      {
+        component: './404',
+      },
+    ],
+  },
+  {
+    name: '打印试卷',
+    icon: 'smile',
+    path: '/print',
+    component: './Print',
+  },
+  {
+    name: '失败页',
+    icon: 'smile',
+    path: '/fail',
+    component: './sys/Fail',
+  },
+  {
+    name: '成功页',
+    icon: 'smile',
+    path: '/success',
+    component: './sys/Success',
   },
   {
     component: './404',

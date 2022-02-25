@@ -27,6 +27,17 @@ interface RequestError extends Error {
 declare namespace API {
   type CurrentUser = User;
 
+  type User = {
+    id: number;
+    email: string;
+    name: string;
+    password: string;
+    college: string;
+    createdAt: Date;
+    updatedAt: Date;
+    roles: string[];
+  };
+
   type SvgCaptcha = {
     img: string;
     key: string;
@@ -45,6 +56,8 @@ declare namespace API {
 
   type Paper = {
     id: string;
+    aName: string;
+    bName: string;
     course: string;
     college: string;
     teacherId: number;
@@ -52,9 +65,17 @@ declare namespace API {
     status: string;
     createdAt: Date;
     updatedAt: Date;
+    teacher?: User;
   };
 
   type UploadPaperParams = Partial<Omit<CreatePaperParams, 'remark'>>;
+
+  type CreateCheckParams = {
+    content: string;
+    images?: string[];
+    status: string;
+    paperId: string;
+  };
 
   type TokenResult = {
     accessToken?: string;

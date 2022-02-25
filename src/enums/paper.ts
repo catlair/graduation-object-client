@@ -1,11 +1,11 @@
-export const PaperEenum = {
+export const PaperEnum = {
   WAITING: 'WAITING',
   PASS: 'PASS',
   REJECT: 'REJECT',
   PRINT: 'PRINT',
 };
 
-export const PaperLifeEenum = {
+export const PaperLifeEnum = {
   CREATE: 'CREATE',
   UPDATE: 'UPDATE',
   PASS: 'PASS',

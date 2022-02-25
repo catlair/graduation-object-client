@@ -34,13 +34,18 @@ const refreshHandle = async () => {
 };
 /** 判断过期 */
 export const loginExpiredInterceptor = async (res: Response, options: RequestOptionsInit) => {
-  const data = await res.clone().json();
+  let data;
+  try {
+    data = await res.clone().json();
+  } catch (error) {
+    console.error(error);
+    return res;
+  }
 
   // 目前问题是如果有多个接口同时请求, 可能会导致重复请求
   if (data.errorCode === StatusCodeEnum.LOGIN_EXPIRED) {
     await refreshHandle();
-    options.prefix = '';
-    return await defHttp(res.url, options);
+    return await defHttp(options.url, options);
   }
 
   return res;
@@ -56,13 +61,18 @@ export const request: RequestConfig = {
     async function transform(ctx, next) {
       await next();
       const body = ctx.res;
-
       // TEMP: 临时设置，应对Mock数据
       if (/^\/api/.test(ctx.req.url)) {
         return;
       }
 
-      ctx.res = body.data || body;
+      if (ctx.req.options.noTransform) {
+        return;
+      }
+
+      if (!body.pageSize) {
+        ctx.res = body.data || body;
+      }
     },
   ],
   prefix: '/dev-api',

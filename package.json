@@ -19,7 +19,6 @@
     "lint:style": "stylelint --fix \"src/**/*.less\" --syntax less",
     "openapi": "umi openapi",
     "playwright": "playwright install && playwright test",
-    "precommit": "lint-staged",
     "prettier": "prettier -c --write \"src/**/*\"",
     "serve": "umi-serve",
     "start": "cross-env UMI_ENV=dev umi dev",
@@ -49,16 +48,20 @@
     "@ant-design/pro-form": "^1.52.14",
     "@ant-design/pro-layout": "^6.32.7",
     "@ant-design/pro-table": "^2.62.8",
+    "@pdf-lib/fontkit": "^1.1.1",
     "@umijs/route-utils": "^2.0.4",
     "antd": "^4.18.5",
+    "antd-img-crop": "^4.1.0",
     "classnames": "^2.3.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
     "omit.js": "^2.0.2",
+    "pdf-lib": "^1.17.1",
     "rc-menu": "^9.3.2",
     "rc-util": "^5.17.0",
     "react": "^17.0.2",
+    "react-color": "^2.19.3",
     "react-dev-inspector": "^1.7.1",
     "react-dom": "^17.0.2",
     "react-helmet-async": "^1.2.2",
@@ -75,6 +78,7 @@
     "@types/jest": "^27.4.0",
     "@types/lodash": "^4.14.178",
     "@types/react": "^17.0.38",
+    "@types/react-color": "^3.0.6",
     "@types/react-dom": "^17.0.11",
     "@types/react-helmet": "^6.1.5",
     "@types/validator": "^13.7.1",
@@ -114,8 +118,5 @@
   },
   "engines": {
     "node": ">=10.0.0"
-  },
-  "gitHooks": {
-    "commit-msg": "fabric verify-commit"
   }
 }

@@ -29,6 +29,18 @@ export async function getPapersByTeacher(
   });
 }
 
+/** 获取试卷列表 GET /paper */
+export async function getPapersByCollege(
+  params: API.PageParams = { pageSize: 10, current: 1 },
+  options?: Record<string, any>,
+) {
+  return request<API.Paper>('/paper', {
+    method: 'GET',
+    params,
+    ...(options || {}),
+  });
+}
+
 /** 获取试卷 GET /paper/:id */
 export async function getPaper(id: string, options?: Record<string, any>) {
   return request<API.Paper>(`/paper/${id}`, {

@@ -30,7 +30,7 @@ export async function getInitialState(): Promise<{
     try {
       return await queryCurrentUser();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       history.push(loginPath);
     }
     return undefined;
@@ -58,11 +58,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     // },
     footerRender: () => <Footer />,
     onPageChange: () => {
-      const { location } = history;
+      // const { location } = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
-        history.push(loginPath);
-      }
+      // if (!initialState?.currentUser && location.pathname !== loginPath) {
+      //   history.push(loginPath);
+      // }
     },
     links: isDev
       ? [
