@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Input } from 'antd';
 import { SafetyCertificateOutlined } from '@ant-design/icons';
-import { isEmpty } from 'lodash';
 import { getSvgCaptcha } from '@/services/login';
 
 interface CaptchaInputValue {
-  captchaCode?: string;
-  captchaKey?: string;
+  code?: string;
+  key?: string;
 }
 
 interface CaptchaInputProps {
@@ -14,23 +13,26 @@ interface CaptchaInputProps {
   onChange?: (value: CaptchaInputValue) => void;
 }
 
+interface CaptchaInputState {
+  key: string;
+  code: string;
+  img: string;
+}
+
 const CaptchaInput: React.FC<CaptchaInputProps> = ({ value = {}, onChange }) => {
-  const [captchaCode, setCaptchaCode] = useState<string>('');
-  const [captchaKey, setCaptchaKey] = useState<string>('');
-  const [imageData, setImageData] = useState<string>('');
+  const [captcha, setCaptcha] = useState<CaptchaInputState>({} as CaptchaInputState);
 
   // 触发改变
-  const triggerChange = (changedValue: { captchaCode?: string; captchaKey?: string }) => {
+  const triggerChange = (changedValue: CaptchaInputValue) => {
     if (onChange) {
-      onChange({ captchaCode, captchaKey, ...value, ...changedValue });
+      onChange({ ...value, key: captcha?.key, ...changedValue });
     }
   };
 
   const changeCaptchaCode = useCallback(async () => {
     try {
       const { key, img } = await getSvgCaptcha();
-      setCaptchaKey(key);
-      setImageData(img);
+      setCaptcha((v) => ({ ...v, key, img }));
     } catch (error) {
       console.error(error);
     }
@@ -43,10 +45,7 @@ const CaptchaInput: React.FC<CaptchaInputProps> = ({ value = {}, onChange }) => 
   // 输入框变化
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const code = e.target.value || '';
-    if (!isEmpty(code)) {
-      setCaptchaCode(code);
-    }
-    triggerChange({ captchaCode: code });
+    triggerChange({ code });
   };
 
   // 时间类型变化
@@ -74,7 +73,7 @@ const CaptchaInput: React.FC<CaptchaInputProps> = ({ value = {}, onChange }) => 
         style={{
           display: 'inline-block',
           width: '40%',
-          background: `url(${imageData}) no-repeat`,
+          background: `url(${captcha.img}) no-repeat`,
           cursor: 'pointer',
         }}
         onClick={onClickImage}

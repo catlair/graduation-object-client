@@ -38,6 +38,17 @@ declare namespace API {
     roles: string[];
   };
 
+  type ChangePassword = {
+    oldPassword: string;
+    password: string;
+  };
+
+  type ResetPassword = {
+    email: string;
+    code: string;
+    password: string;
+  };
+
   type SvgCaptcha = {
     img: string;
     key: string;
@@ -119,12 +130,28 @@ declare namespace API {
     createdAt: string;
   };
 
+  type ChangeEmail = {
+    email: string;
+    oldEmail: string;
+    code: string;
+  };
+
+  type UpdateEmail = {
+    key: string;
+    userId: number;
+  };
+
   type LoginParams = {
     username?: string;
     password?: string;
     autoLogin?: boolean;
     email?: string;
-    captcha?: string;
+    captcha?:
+      | {
+          code: string;
+          key: string;
+        }
+      | string;
     type?: string;
   };
 
@@ -157,5 +184,14 @@ declare namespace API {
     datetime?: string;
     description?: string;
     type?: NoticeIconItemType;
+  };
+
+  /** 分页 */
+  type Page<T> = {
+    current: number;
+    pageSize: number;
+    success: true;
+    data: T[];
+    total: number;
   };
 }

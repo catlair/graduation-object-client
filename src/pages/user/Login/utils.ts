@@ -6,7 +6,7 @@ import type { LoginInput } from './interface';
 
 export async function validatorLogin(values: API.LoginParams) {
   if (values.type === 'email') {
-    return await loginByEmail({ email: values.email!, code: values.captcha! });
+    return await loginByEmail({ email: values.email!, code: values.captcha as string });
   }
   const loginInput: LoginInput = { password: '', username: '' };
   if (!values.password || !values.username) {
@@ -20,5 +20,5 @@ export async function validatorLogin(values: API.LoginParams) {
   } else if (isNumeric(values.username)) {
     loginInput.username = Number(values.username);
   }
-  return await login({ ...loginInput } as API.LoginParams);
+  return await login({ ...loginInput, ...(values.captcha as {}) } as API.LoginParams);
 }

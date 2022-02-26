@@ -1,13 +1,13 @@
 import fontkit from '@pdf-lib/fontkit';
 import { Spin } from 'antd';
-import { degrees, PDFDocument, PDFPageDrawTextOptions, rgb } from 'pdf-lib';
+import { degrees, PDFDocument, rgb } from 'pdf-lib';
 import React from 'react';
 import Setting from './components/Setting';
 import PDFViewer from './components/Viewer';
-import { slantWatermark } from './utils';
+import { slantWatermark } from '../utils';
 
 export default class Component extends React.Component {
-  state: Readonly<WaterDrawTextParams & { pdfBytes: Uint8Array }> = {
+  state: Readonly<WaterDrawTextParams & { pdfBytes: Uint8Array; page: string }> = {
     watermark: '',
     rotate: 0,
     fontsize: 200,
@@ -15,6 +15,7 @@ export default class Component extends React.Component {
       rgb: { r: 190, g: 190, b: 190, a: 0.12 },
     } as ColorResult,
     pdfBytes: null as unknown as Uint8Array,
+    page: 'a',
   };
 
   setDrawTextParams = (v) => {
@@ -22,8 +23,28 @@ export default class Component extends React.Component {
     this.setState({ ...v });
   };
 
+  setPaperPage = () => {
+    console.log(this.state.page);
+    switch (this.state.page) {
+      case 'b':
+        this.setState({ page: 'a' }, () => {
+          this.renderPdf();
+        });
+        break;
+      default:
+        this.setState({ page: 'b' }, () => {
+          this.renderPdf();
+        });
+        break;
+    }
+  };
+
   componentDidMount() {
-    this.modifyPdf().then((v) => {
+    this.renderPdf();
+  }
+
+  renderPdf(v?: any) {
+    this.modifyPdf(v).then((v) => {
       this.setState({ ...v });
     });
   }
@@ -31,8 +52,10 @@ export default class Component extends React.Component {
   async modifyPdf(values: Partial<WaterDrawTextParams> = {}) {
     const { color, fontsize, rotate, watermark } = { ...this.state, ...values };
 
-    const url = 'http://localhost:3010/upload/paper/1$%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84$a.pdf';
-    // const url = 'http://localhost:3010/upload/paper/1$数据结构$b.pdf';
+    const url = `http://localhost:3010/upload/paper/${encodeURIComponent(
+      // @ts-ignore
+      `${this.props.match.params.id}${this.state.page}.pdf`,
+    )}`;
     const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
     const fontUrl = 'http://localhost:8000/fonts/msyh.ttf';
@@ -77,11 +100,10 @@ export default class Component extends React.Component {
         <PDFViewer pdfBytes={this.state.pdfBytes}></PDFViewer>
         <Setting
           setDrawTextParams={(v) => {
-            this.modifyPdf(v).then((v) => {
-              this.setState({ ...v });
-            });
+            this.renderPdf(v);
           }}
           drawTextParams={this.state}
+          setPaperPage={this.setPaperPage}
         ></Setting>
       </Spin>
     );

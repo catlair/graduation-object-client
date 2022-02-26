@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { uploadPaperFiles } from '@/services/upload';
 import { getColleges } from '@/services/api';
 import { createPaper } from '@/services/paper';
+import { history } from 'umi';
 
 interface PaperName {
   a: string;
@@ -51,8 +52,8 @@ export default () => {
           onFinish={async (values) => {
             try {
               await createPaper(values as unknown as API.CreatePaperParams, paperName);
-
               message.success('提交成功');
+              history.push('/success');
             } catch (error) {
               message.error('提交失败，请重试');
             }

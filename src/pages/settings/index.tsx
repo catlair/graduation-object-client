@@ -1,7 +1,7 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
-import SecurityView from './components/security';
+import SecurityView from './components/Security';
 import styles from './style.less';
 
 const { Item } = Menu;

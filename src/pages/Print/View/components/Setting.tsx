@@ -7,6 +7,7 @@ import { SketchPicker } from 'react-color';
 export default class SettingComponent extends React.Component<{
   setDrawTextParams: (params: any) => void;
   drawTextParams: WaterDrawTextParams;
+  setPaperPage: () => void;
 }> {
   state: Readonly<{ drawerVisit: boolean; color: ColorResult }> = {
     drawerVisit: false,
@@ -49,6 +50,7 @@ export default class SettingComponent extends React.Component<{
           >
             打印文档
           </Button>
+          <Button type="primary" onClick={this.props.setPaperPage}>切换试卷</Button>
         </Space>
         {this.props.drawTextParams ? (
           <DrawerForm

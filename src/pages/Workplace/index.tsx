@@ -2,42 +2,57 @@ import type { FC } from 'react';
 import { Avatar, Card, Col, List, Skeleton, Row } from 'antd';
 import type { PieConfig } from '@ant-design/charts';
 import { Pie } from '@ant-design/charts';
-import { Link, useRequest } from 'umi';
+import { Link, useAccess, useRequest, useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import moment from 'moment';
 import EditableLinkGroup from './components/EditableLinkGroup';
 import styles from './style.less';
-import type { ActivitiesType, CurrentUser } from './data.d';
+import type { ActivitiesType } from './data.d';
 import { queryProjectNotice, queryActivities, fakeChartData } from './service';
+import { getGreeting } from '@/utils/time';
 
-const links = [
-  {
-    title: '操作一',
-    href: '',
-  },
-  {
-    title: '操作二',
-    href: '',
-  },
-  {
-    title: '操作三',
-    href: '',
-  },
-  {
-    title: '操作四',
-    href: '',
-  },
-  {
-    title: '操作五',
-    href: '',
-  },
-  {
-    title: '操作六',
-    href: '',
-  },
-];
+function getLinks() {
+  const links: { title: string; href: string; id?: string }[] = [
+    {
+      title: '工作台',
+      href: '',
+    },
+    {
+      title: '个人设置',
+      href: '/settings',
+    },
+  ];
+  const access = useAccess();
+  if (access.canTeacher) {
+    links.push(
+      {
+        title: '试卷列表',
+        id: 'paper/list',
+        href: '/paper/list',
+      },
+      {
+        title: '上传试卷',
+        href: '/paper/create',
+      },
+    );
+  }
+  if (access.canDirectors) {
+    links.push({
+      title: '试卷列表',
+      href: '/check/list',
+      id: 'check/list',
+    });
+  }
+  if (access.canSecretary) {
+    links.push({
+      title: '打印试卷',
+      href: '/print',
+    });
+  }
+  return links;
+}
 
-const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentUser }) => {
+const PageHeaderContent: FC<{ currentUser: Partial<API.User> }> = ({ currentUser }) => {
   const loading = currentUser && Object.keys(currentUser).length;
   if (!loading) {
     return <Skeleton avatar paragraph={{ rows: 1 }} active />;
@@ -45,17 +60,13 @@ const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentU
   return (
     <div className={styles.pageHeaderContent}>
       <div className={styles.avatar}>
-        <Avatar size="large" src={currentUser.avatar} />
+        <Avatar
+          size="large"
+          src={'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'}
+        />
       </div>
       <div className={styles.content}>
-        <div className={styles.contentTitle}>
-          早安，
-          {currentUser.name}
-          ，祝你开心每一天！
-        </div>
-        <div>
-          {currentUser.title} |{currentUser.group}
-        </div>
+        <div className={styles.contentTitle}>{getGreeting(currentUser.name)}</div>
       </div>
     </div>
   );
@@ -104,6 +115,10 @@ const Workplace: FC = () => {
   const { loading: projectLoading, data: projectNotice = [] } = useRequest(queryProjectNotice);
   const { loading: activitiesLoading, data: activities = [] } = useRequest(queryActivities);
   const { data } = useRequest(fakeChartData);
+  // 使用 Access
+  const links = getLinks();
+  const { initialState } = useModel('@@initialState');
+  const currentUser = initialState?.currentUser!;
 
   const renderActivities = (item: ActivitiesType) => {
     const events = item.template.split(/@\{([^{}]*)\}/gi).map((key) => {
@@ -138,21 +153,7 @@ const Workplace: FC = () => {
   };
 
   return (
-    <PageContainer
-      content={
-        <PageHeaderContent
-          currentUser={{
-            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-            name: '吴彦祖',
-            userid: '00000001',
-            email: 'antdesign@alipay.com',
-            signature: '海纳百川，有容乃大',
-            title: '交互专家',
-            group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
-          }}
-        />
-      }
-    >
+    <PageContainer content={<PageHeaderContent currentUser={currentUser} />}>
       <Row gutter={24}>
         <Col xl={16} lg={24} md={24} sm={24} xs={24}>
           <Card

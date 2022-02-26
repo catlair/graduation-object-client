@@ -30,7 +30,9 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (values: API.LoginParams) => {
     try {
-      // 登录
+      console.log('handleSubmit', values);
+
+      // 登录;
       const data = await validatorLogin({ ...values, type });
 
       if (!data) {
@@ -73,12 +75,6 @@ const Login: React.FC = () => {
           initialValues={{
             autoLogin: true,
           }}
-          // actions={[
-          //   '其他登录方式 :',
-          //   <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-          //   <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-          //   <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
-          // ]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
@@ -117,16 +113,20 @@ const Login: React.FC = () => {
                     required: true,
                     message: '密码是必填项！',
                   },
+                  // 限制密码长度 6-20 位
+                  {
+                    min: 6,
+                    max: 20,
+                    message: '密码长度为 6-20 位！',
+                  },
                 ]}
               />
               <Form.Item
                 name="captcha"
                 rules={[
                   {
-                    validateTrigger: 'onBlur',
-                    validator: async (rule, value) => {
-                      console.log(rule);
-                    },
+                    required: true,
+                    message: '验证码是必填项！',
                   },
                 ]}
               >

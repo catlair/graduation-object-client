@@ -9,9 +9,10 @@ import { currentUser as queryCurrentUser } from './services/api';
 import { BookOutlined } from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
 export { request } from './utils/request';
+import { loginPath } from './constant';
 
 const isDev = process.env.NODE_ENV === 'development';
-const loginPath = '/user/login';
+const whiteList = [loginPath, '/settings/email'];
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -26,6 +27,7 @@ export async function getInitialState(): Promise<{
   currentUser?: API.CurrentUser;
   loading?: boolean;
 }> {
+  const { location } = history;
   const fetchUserInfo = async () => {
     try {
       return await queryCurrentUser();
@@ -36,7 +38,7 @@ export async function getInitialState(): Promise<{
     return undefined;
   };
   // 如果是登录页面，不执行
-  if (history.location.pathname !== loginPath) {
+  if (!whiteList.some((r) => location.pathname.startsWith(r))) {
     const currentUser = await fetchUserInfo();
     return {
       currentUser,
@@ -58,11 +60,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     // },
     footerRender: () => <Footer />,
     onPageChange: () => {
-      // const { location } = history;
-      // 如果没有登录，重定向到 login
-      // if (!initialState?.currentUser && location.pathname !== loginPath) {
-      //   history.push(loginPath);
-      // }
+      const { location } = history;
+      // 如果没有登录，
+      // 且不为白名单内路由
+      // 重定向到 login
+      if (!initialState?.currentUser && !whiteList.some((r) => location.pathname.startsWith(r))) {
+        history.push(loginPath);
+      }
     },
     links: isDev
       ? [

@@ -22,7 +22,7 @@ export async function getPapersByTeacher(
   params: API.PageParams = { pageSize: 10, current: 1 },
   options?: Record<string, any>,
 ) {
-  return request<API.Paper>('/paper/teacher', {
+  return request<API.Page<API.Paper>>('/paper/teacher', {
     method: 'GET',
     params,
     ...(options || {}),
@@ -34,7 +34,7 @@ export async function getPapersByCollege(
   params: API.PageParams = { pageSize: 10, current: 1 },
   options?: Record<string, any>,
 ) {
-  return request<API.Paper>('/paper', {
+  return request<API.Page<API.Paper>>('/paper', {
     method: 'GET',
     params,
     ...(options || {}),

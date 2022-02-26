@@ -8,6 +8,7 @@ import styles from './index.less';
 import { outLogin } from '@/services/login';
 import type { MenuInfo } from 'rc-menu/lib/interface';
 import { getRefreshToken, setTokens } from '@/utils/token';
+import { loginPath } from '@/constant';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -24,9 +25,9 @@ const loginOut = async () => {
   const { query = {}, search, pathname } = history.location;
   const { redirect } = query;
   // Note: There may be security issues, please note
-  if (window.location.pathname !== '/user/login' && !redirect) {
+  if (window.location.pathname !== loginPath && !redirect) {
     history.replace({
-      pathname: '/user/login',
+      pathname: loginPath,
       search: stringify({
         redirect: pathname + search,
       }),
