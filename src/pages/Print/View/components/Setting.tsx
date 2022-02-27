@@ -6,13 +6,14 @@ import { SketchPicker } from 'react-color';
 
 export default class SettingComponent extends React.Component<{
   setDrawTextParams: (params: any) => void;
-  drawTextParams: WaterDrawTextParams;
+  drawTextParams: WaterDrawTextParams & { page: string };
   setPaperPage: () => void;
 }> {
   state: Readonly<{ drawerVisit: boolean; color: ColorResult }> = {
     drawerVisit: false,
     color: null as unknown as ColorResult,
   };
+  ref: HTMLIFrameElement | null = null;
 
   setColor = (color: ColorResult) => {
     this.setState({ color });
@@ -20,6 +21,17 @@ export default class SettingComponent extends React.Component<{
 
   componentDidMount() {
     this.setColor(this.props.drawTextParams.color);
+  }
+
+  componentDidUpdate() {
+    if (this.ref) {
+      return;
+    }
+    this.ref = document.querySelector('iframe') as HTMLIFrameElement;
+    const contentWindow = this.ref?.contentWindow;
+    if (!contentWindow) {
+      return;
+    }
   }
 
   render() {
@@ -42,15 +54,16 @@ export default class SettingComponent extends React.Component<{
           <Button
             type="primary"
             onClick={() => {
-              const iframe = document.querySelector('iframe') as HTMLIFrameElement;
-              if (iframe) {
-                iframe.contentWindow?.print();
+              if (this.ref && this.ref.contentWindow) {
+                this.ref.contentWindow.print();
               }
             }}
           >
             打印文档
           </Button>
-          <Button type="primary" onClick={this.props.setPaperPage}>切换试卷</Button>
+          <Button type="primary" onClick={this.props.setPaperPage}>
+            {this.props.drawTextParams.page === 'a' ? '切换试卷 B' : '切换试卷 A'}
+          </Button>
         </Space>
         {this.props.drawTextParams ? (
           <DrawerForm

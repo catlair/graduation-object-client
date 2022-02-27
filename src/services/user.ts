@@ -35,3 +35,29 @@ export const resetPassword = (data: API.ResetPassword, options?: Record<string, 
     ...(options || {}),
   });
 };
+
+/** 获取所有用户 GET /user */
+export const getUsers = (options?: Record<string, any>) => {
+  return request<API.User[]>('/user', {
+    method: 'GET',
+    ...(options || {}),
+  });
+};
+
+/** 更新用户 PATCH /user/:id */
+export const updateUser = (id: number, data: API.UpdateUser, options?: Record<string, any>) => {
+  return request(`/user/${id}`, {
+    method: 'PATCH',
+    data,
+    ...(options || {}),
+  });
+};
+
+/** 添加用户 POST /user */
+export const createUser = (data: API.CreateUser, options?: Record<string, any>) => {
+  return request('/user', {
+    method: 'POST',
+    data,
+    ...(options || {}),
+  });
+};

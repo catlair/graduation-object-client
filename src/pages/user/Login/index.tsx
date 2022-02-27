@@ -30,8 +30,6 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (values: API.LoginParams) => {
     try {
-      console.log('handleSubmit', values);
-
       // 登录;
       const data = await validatorLogin({ ...values, type });
 
@@ -58,7 +56,7 @@ const Login: React.FC = () => {
       if (name === 'BizError') {
         setUserLoginState({ status: 'error', errorMessage: msg });
       } else {
-        console.log(error);
+        console.error(error);
         message.error('登录失败，请重试！');
       }
     }
@@ -184,7 +182,7 @@ const Login: React.FC = () => {
                     await getEmailCaptcha({ email });
                     message.success('获取验证码成功！');
                   } catch (error) {
-                    console.log(error);
+                    console.warn(error);
                   }
                 }}
               />

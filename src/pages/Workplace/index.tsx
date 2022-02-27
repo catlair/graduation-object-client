@@ -49,6 +49,12 @@ function getLinks() {
       href: '/print',
     });
   }
+  if (access.canAdmin) {
+    links.push({
+      title: '用户管理',
+      href: '/admin/user',
+    });
+  }
   return links;
 }
 

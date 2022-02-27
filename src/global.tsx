@@ -13,7 +13,7 @@ const clearCache = () => {
           caches.delete(key);
         });
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.warn(e));
   }
 }; // if pwa is true
 

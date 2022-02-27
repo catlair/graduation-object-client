@@ -5,9 +5,10 @@ import React from 'react';
 import Setting from './components/Setting';
 import PDFViewer from './components/Viewer';
 import { slantWatermark } from '../utils';
+import { getFile } from '@/services/upload';
 
 export default class Component extends React.Component {
-  state: Readonly<WaterDrawTextParams & { pdfBytes: Uint8Array; page: string }> = {
+  state: Readonly<WaterDrawTextParams & { pdfBytes: Uint8Array; page: string; loading: true }> = {
     watermark: '',
     rotate: 0,
     fontsize: 200,
@@ -16,15 +17,14 @@ export default class Component extends React.Component {
     } as ColorResult,
     pdfBytes: null as unknown as Uint8Array,
     page: 'a',
+    loading: true,
   };
 
   setDrawTextParams = (v) => {
-    console.log(v);
     this.setState({ ...v });
   };
 
   setPaperPage = () => {
-    console.log(this.state.page);
     switch (this.state.page) {
       case 'b':
         this.setState({ page: 'a' }, () => {
@@ -44,22 +44,26 @@ export default class Component extends React.Component {
   }
 
   renderPdf(v?: any) {
+    this.setState({ loading: true, ...v });
     this.modifyPdf(v).then((v) => {
-      this.setState({ ...v });
+      this.setState({ ...v, loading: false });
     });
   }
 
   async modifyPdf(values: Partial<WaterDrawTextParams> = {}) {
     const { color, fontsize, rotate, watermark } = { ...this.state, ...values };
-
-    const url = `http://localhost:3010/upload/paper/${encodeURIComponent(
+    const existingPdfBytes = await getFile(
       // @ts-ignore
       `${this.props.match.params.id}${this.state.page}.pdf`,
-    )}`;
-    const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
-    const pdfDoc = await PDFDocument.load(existingPdfBytes);
-    const fontUrl = 'http://localhost:8000/fonts/msyh.ttf';
-    const fontBytes = await fetch(fontUrl).then((res) => res.arrayBuffer());
+      'paper',
+      'arrayBuffer',
+    );
+    const [pdfDoc, fontBytes] = await Promise.all([
+      PDFDocument.load(existingPdfBytes),
+      fetch(`${location.protocol}//${location.host}/fonts/msyh.ttf`).then((res) =>
+        res.arrayBuffer(),
+      ),
+    ]);
     pdfDoc.registerFontkit(fontkit);
     const helveticaFont = await pdfDoc.embedFont(fontBytes);
 
@@ -96,8 +100,12 @@ export default class Component extends React.Component {
 
   render() {
     return (
-      <Spin tip="Loading..." size="large" spinning={!this.state.pdfBytes}>
-        <PDFViewer pdfBytes={this.state.pdfBytes}></PDFViewer>
+      <Spin tip="Loading..." size="large" spinning={this.state.loading}>
+        {this.state.pdfBytes ? (
+          <PDFViewer pdfBytes={this.state.pdfBytes}></PDFViewer>
+        ) : (
+          <div style={{ width: '80vw', height: '80vh' }}></div>
+        )}
         <Setting
           setDrawTextParams={(v) => {
             this.renderPdf(v);

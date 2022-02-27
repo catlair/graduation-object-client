@@ -55,7 +55,7 @@ export default () => {
               history.push('/paper/list');
               message.success('修改成功');
             } catch (error) {
-              console.log(error);
+              console.warn(error);
             }
           }}
           request={() => getPaper(paperId)}

@@ -98,7 +98,7 @@ export default ({ email }) => {
               await getEmailCaptcha({ email });
               message.success('获取验证码成功！');
             } catch (error) {
-              console.log(error);
+              console.warn(error);
             }
           }}
         />

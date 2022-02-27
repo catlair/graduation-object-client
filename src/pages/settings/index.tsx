@@ -1,5 +1,5 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { GridContent } from '@ant-design/pro-layout';
+import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
 import SecurityView from './components/Security';
 import styles from './style.less';
@@ -65,35 +65,37 @@ const AccountSettings: React.FC = () => {
   };
 
   return (
-    <GridContent>
-      <div
-        className={styles.main}
-        ref={(ref) => {
-          if (ref) {
-            dom.current = ref;
-          }
-        }}
-      >
-        <div className={styles.leftMenu}>
-          <Menu
-            mode={initConfig.mode}
-            selectedKeys={[initConfig.selectKey]}
-            onClick={({ key }) => {
-              setInitConfig({
-                ...initConfig,
-                selectKey: key as AccountSettingsStateKeys,
-              });
-            }}
-          >
-            {getMenu()}
-          </Menu>
+    <PageHeaderWrapper>
+      <GridContent>
+        <div
+          className={styles.main}
+          ref={(ref) => {
+            if (ref) {
+              dom.current = ref;
+            }
+          }}
+        >
+          <div className={styles.leftMenu}>
+            <Menu
+              mode={initConfig.mode}
+              selectedKeys={[initConfig.selectKey]}
+              onClick={({ key }) => {
+                setInitConfig({
+                  ...initConfig,
+                  selectKey: key as AccountSettingsStateKeys,
+                });
+              }}
+            >
+              {getMenu()}
+            </Menu>
+          </div>
+          <div className={styles.right}>
+            <div className={styles.title}>{menuMap[initConfig.selectKey]}</div>
+            {renderChildren()}
+          </div>
         </div>
-        <div className={styles.right}>
-          <div className={styles.title}>{menuMap[initConfig.selectKey]}</div>
-          {renderChildren()}
-        </div>
-      </div>
-    </GridContent>
+      </GridContent>
+    </PageHeaderWrapper>
   );
 };
 export default AccountSettings;

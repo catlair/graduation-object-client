@@ -30,21 +30,10 @@ export default [
   },
   {
     path: '/admin',
-    name: '管理页',
+    name: '用户管理',
     icon: 'crown',
     access: 'canAdmin',
     component: './Admin',
-    routes: [
-      {
-        path: '/admin/add-user',
-        name: '添加用户',
-        icon: 'smile',
-        component: './Workplace',
-      },
-      {
-        component: './404',
-      },
-    ],
   },
   {
     access: 'canTeacher',

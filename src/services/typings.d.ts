@@ -33,9 +33,25 @@ declare namespace API {
     name: string;
     password: string;
     college: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: Date | string;
+    updatedAt: Date | string;
     roles: string[];
+  };
+
+  type CreateUser = {
+    id: number;
+    email: string;
+    name: string;
+    password: string;
+    college: string;
+    roles: string[];
+  };
+
+  type UpdateUser = {
+    email?: string;
+    name?: string;
+    college?: string;
+    roles?: string[];
   };
 
   type ChangePassword = {

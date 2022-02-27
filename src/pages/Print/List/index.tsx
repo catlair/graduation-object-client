@@ -7,7 +7,6 @@ import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { Link } from 'umi';
 import { getPapersByCollege } from '@/services/paper';
-import { PaperLifeEnum } from '@/enums/paper';
 
 const CheckList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -51,8 +50,6 @@ const CheckList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        console.log(record);
-
         return [
           <Link
             key="config"

@@ -1,5 +1,6 @@
 import { uploadPaperFields } from '@/enums/field';
 import { request } from 'umi';
+import { ResponseType } from 'umi-request';
 
 /** 上传试卷文件 POST /upload/paper */
 export async function uploadPaperFiles(
@@ -61,12 +62,13 @@ export async function deletePicture(path: string, options?: Record<string, any>)
 export async function getFile(
   name: string,
   path: 'paper' | 'img' = 'paper',
+  type: ResponseType = 'blob',
   options?: Record<string, any>,
 ) {
   return request(`/upload/${path}/${name}`, {
     method: 'GET',
     ...(options || {}),
-    responseType: 'blob',
+    responseType: type,
     noTransform: true,
   });
 }
