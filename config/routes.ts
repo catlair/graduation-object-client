@@ -20,13 +20,39 @@ export default [
   },
   {
     path: '/',
-    redirect: '/workplace',
+    redirect: '/settings',
+  },
+  {
+    name: '个人设置',
+    icon: 'setting',
+    path: '/settings',
+    routes: [
+      {
+        name: '个人设置',
+        icon: 'setting',
+        path: '/settings',
+        component: './Settings',
+        hideInMenu: true,
+      },
+      {
+        name: '更换邮箱',
+        icon: 'email',
+        path: '/settings/email/:id',
+        component: './settings/Email',
+        hideInMenu: true,
+        layout: false,
+      },
+      {
+        component: './404',
+      },
+    ],
   },
   {
     path: '/workplace',
     name: '工作台',
     icon: 'dashboard',
-    component: './Workplace',
+    redirect: '/settings',
+    hideInMenu: true,
   },
   {
     path: '/admin',
@@ -65,6 +91,13 @@ export default [
         hideInMenu: true,
       },
       {
+        name: '试卷详情',
+        icon: 'filePdf',
+        path: '/paper/detail/:id',
+        component: './paper/Detail',
+        hideInMenu: true,
+      },
+      {
         component: './404',
       },
     ],
@@ -98,34 +131,10 @@ export default [
     ],
   },
   {
-    name: '个人设置',
-    icon: 'setting',
-    path: '/settings',
-    routes: [
-      {
-        name: '个人设置',
-        icon: 'setting',
-        path: '/settings',
-        component: './Settings',
-        hideInMenu: true,
-      },
-      {
-        name: '更换邮箱',
-        icon: 'email',
-        path: '/settings/email/:id',
-        component: './settings/Email',
-        hideInMenu: true,
-        layout: false,
-      },
-      {
-        component: './404',
-      },
-    ],
-  },
-  {
     name: '打印试卷',
     icon: 'printer',
     path: '/print',
+    access: 'canSecretary',
     footerRender: false,
     routes: [
       {

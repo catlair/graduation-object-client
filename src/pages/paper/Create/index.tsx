@@ -53,7 +53,7 @@ export default () => {
             try {
               await createPaper(values as unknown as API.CreatePaperParams, paperName);
               message.success('提交成功');
-              history.push('/success');
+              history.push('/paper/list');
             } catch (error) {
               message.error('提交失败，请重试');
             }

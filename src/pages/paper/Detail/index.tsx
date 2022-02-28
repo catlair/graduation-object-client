@@ -1,16 +1,12 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import ProCard from '@ant-design/pro-card';
 import { getPaper } from '@/services/paper';
-import { useRouteMatch, history } from 'umi';
-import ProForm, { ProFormSelect, ProFormTextArea } from '@ant-design/pro-form';
+import { useRouteMatch } from 'umi';
 import { Button, Descriptions, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { PaperEnum } from '@/enums/paper';
-import { PicturesWall } from './components/PicturesWall';
 import { getFile } from '@/services/upload';
 import { download } from '@/utils/download';
-import type { UploadFile } from 'antd/lib/upload/interface';
-import { createCheck } from '@/services/check';
+import PaperLife from './components/PaperLife';
 import { pdfPreview } from '@/utils/pdf-render';
 
 const handleDownload = async (filename: string) => {
@@ -19,20 +15,11 @@ const handleDownload = async (filename: string) => {
   download(res, filename);
 };
 
-type FormType = {
-  content: string;
-  useMode: {
-    value: string;
-    label: string;
-  };
-};
-
 export default () => {
   const {
     params: { id: paperId },
   } = useRouteMatch<{ id: string }>();
   const [paper, setPaper] = useState<API.Paper>({} as API.Paper);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   useEffect(() => {
     getPaper(paperId).then(setPaper);
@@ -73,66 +60,7 @@ export default () => {
             </Descriptions>
           </>
         )}
-        <ProForm<FormType>
-          onFinish={async (values) => {
-            const { content, useMode } = values;
-            const data: API.CreateCheckParams = {
-              content,
-              status: useMode.value,
-              paperId,
-            };
-            if (fileList.length) {
-              data.images = fileList.map((img) => img.response.path);
-            }
-            try {
-              await createCheck(data);
-              history.push('/check/list');
-              message.success('提交成功');
-            } catch (error) {
-              console.error(error);
-            }
-          }}
-          submitter={{
-            render: (props) => {
-              return [
-                <Button type="primary" key="goToTree" onClick={() => props?.submit()}>
-                  提交 √
-                </Button>,
-              ];
-            },
-          }}
-        >
-          <ProFormSelect
-            width="md"
-            fieldProps={{
-              labelInValue: true,
-            }}
-            initialValue={{ label: '符合要求', value: PaperEnum.PASS }}
-            options={[
-              { label: '符合要求', value: PaperEnum.PASS },
-              { label: '不符合要求', value: PaperEnum.REJECT },
-            ]}
-            name="useMode"
-            label="审核结果"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          />
-          <ProFormTextArea
-            name="content"
-            label="备注"
-            width="lg"
-            placeholder="请输入备注"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          />
-          <PicturesWall fileList={fileList} setFileList={setFileList} />
-        </ProForm>
+        <PaperLife paperId={paperId} ></PaperLife>
       </ProCard>
     </PageContainer>
   );

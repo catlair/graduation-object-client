@@ -1,13 +1,97 @@
 import { message, Space } from 'antd';
 import React from 'react';
-import { useModel } from 'umi';
+import { useModel, useRequest } from 'umi';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
 import NoticeIcon from '@/components/NoticeIcon/NoticeIcon';
+import {
+  deleteNoticeAll,
+  deleteNoticeReadAll,
+  getNotices,
+  setNoticeRead,
+  setNoticeReadAll,
+} from '@/services/notice';
 export type SiderTheme = 'light' | 'dark';
+
+const Notice = ({ data, refresh }) => {
+  const allList = data.map((item) => ({
+    ...item,
+    datetime: item.managerNotice.createdAt,
+    title: item.managerNotice.title,
+    type: 'all',
+  }));
+  const unreadList = allList
+    .filter((item) => !item.read)
+    .map((item) => ({
+      ...item,
+      type: 'unread',
+    }));
+  const readedList = allList
+    .filter((item) => item.read)
+    .map((item) => ({
+      ...item,
+      type: 'read',
+    }));
+  return (
+    <>
+      <NoticeIcon
+        count={allList.length}
+        onClear={async (title: string, key: string) => {
+          if (key === 'all') {
+            await deleteNoticeAll();
+            refresh();
+            message.success('清空成功');
+          } else if (key === 'unread') {
+            await setNoticeReadAll();
+            message.info('所有未读消息已清除');
+            refresh();
+          } else if (key === 'read') {
+            await deleteNoticeReadAll();
+            refresh();
+            message.info('所有已读消息已清除');
+          }
+        }}
+        onItemClick={async (item) => {
+          if (!item.read) {
+            await setNoticeRead(item.id);
+            refresh();
+          } else {
+            return;
+          }
+        }}
+        loading={false}
+        clearText="清空"
+        clearClose
+      >
+        <NoticeIcon.Tab
+          tabKey="unread"
+          count={unreadList.length}
+          list={unreadList}
+          title="未读"
+          emptyText="你已查看所有通知"
+        />
+        <NoticeIcon.Tab
+          tabKey="read"
+          title="已读"
+          count={readedList.length}
+          list={readedList}
+          emptyText="你已查看所有通知"
+        />
+        <NoticeIcon.Tab
+          tabKey="all"
+          count={allList.length}
+          list={allList}
+          title="全部"
+          emptyText="你已查看所有通知"
+        />
+      </NoticeIcon>
+    </>
+  );
+};
 
 const GlobalHeaderRight: React.FC = () => {
   const { initialState } = useModel('@@initialState');
+  const { data, refresh } = useRequest(getNotices);
 
   if (!initialState || !initialState.settings) {
     return null;
@@ -20,60 +104,9 @@ const GlobalHeaderRight: React.FC = () => {
     className = `${styles.right}  ${styles.dark}`;
   }
 
-  const list = [
-    {
-      id: '000000001',
-      title: '你收到了 14 份新周报',
-      datetime: '2017-08-09',
-      type: 'notification' as const,
-    },
-    {
-      id: '000000002',
-      title: '你推荐的 曲妮妮 已通过第三轮面试',
-      datetime: '2017-08-08',
-      type: 'notification' as const,
-    },
-  ];
-
   return (
     <Space className={className}>
-      <NoticeIcon
-        count={6}
-        onItemClick={(item) => {
-          message.info(`${item.title} 被点击了`);
-        }}
-        onClear={(title: string, key: string) => message.info('点击了清空更多')}
-        loading={false}
-        clearText="清空"
-        viewMoreText="查看更多"
-        onViewMore={() => message.info('点击了查看更多')}
-        clearClose
-      >
-        <NoticeIcon.Tab
-          tabKey="notification"
-          count={2}
-          list={list}
-          title="通知"
-          emptyText="你已查看所有通知"
-          showViewMore
-        />
-        <NoticeIcon.Tab
-          tabKey="message"
-          count={2}
-          list={list}
-          title="消息"
-          emptyText="您已读完所有消息"
-          showViewMore
-        />
-        <NoticeIcon.Tab
-          tabKey="event"
-          title="待办"
-          emptyText="你已完成所有待办"
-          count={2}
-          list={list}
-          showViewMore
-        />
-      </NoticeIcon>
+      {data ? <Notice data={data} refresh={refresh} /> : null}
       <Avatar />
     </Space>
   );

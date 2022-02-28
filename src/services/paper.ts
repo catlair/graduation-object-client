@@ -59,3 +59,11 @@ export async function patchPaper(id: string, content: string, options?: Record<s
     ...(options || {}),
   });
 }
+
+/** 获取试卷的生命周期 GET /paper/life/:id */
+export async function getPaperLife(id: string, options?: Record<string, any>) {
+  return request<API.PaperLife[]>(`/paper/life/${id}`, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}

@@ -69,6 +69,7 @@ export async function getFile(
     method: 'GET',
     ...(options || {}),
     responseType: type,
+    cache: path === 'img' ? 'force-cache' : 'default',
     noTransform: true,
   });
 }

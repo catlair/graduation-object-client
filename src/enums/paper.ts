@@ -12,3 +12,11 @@ export const PaperLifeEnum = {
   REJECT: 'REJECT',
   PRINT: 'PRINT',
 };
+
+export const PaperLifeLabel = {
+  CREATE: '创建',
+  UPDATE: '修改',
+  PASS: '通过',
+  REJECT: '驳回',
+  PRINT: '打印',
+};

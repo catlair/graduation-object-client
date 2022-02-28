@@ -7,6 +7,7 @@ import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { Link } from 'umi';
 import { getPapersByCollege } from '@/services/paper';
+import { PaperEnum } from '@/enums/paper';
 
 const CheckList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -71,7 +72,7 @@ const CheckList: React.FC = () => {
           const papers = await getPapersByCollege();
           return {
             ...papers,
-            data: papers.data.filter((paper) => true),
+            data: papers.data.filter((paper) => paper.status === PaperEnum.PASS),
           };
         }}
         columns={columns}

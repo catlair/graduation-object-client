@@ -95,6 +95,16 @@ declare namespace API {
     teacher?: User;
   };
 
+  type PaperLife = {
+    id: string;
+    paperId: string;
+    userId: number;
+    status: 'CREATE' | 'UPDATE' | 'PASS' | 'REJECT' | 'PRINT';
+    content?: string;
+    images?: string[];
+    createdAt: Date;
+  };
+
   type UploadPaperParams = Partial<Omit<CreatePaperParams, 'remark'>>;
 
   type CreateCheckParams = {
@@ -187,18 +197,21 @@ declare namespace API {
     success?: boolean;
   };
 
-  type NoticeIconItemType = 'notification' | 'message' | 'event';
+  type NoticeIconItemType = 'all' | 'read' | 'unread';
 
   type NoticeIconItem = {
-    id?: string;
-    extra?: string;
-    key?: string;
-    read?: boolean;
-    avatar?: string;
-    title?: string;
-    status?: string;
-    datetime?: string;
-    description?: string;
+    id: string;
+    userId: number;
+    noticeId: number;
+    read: boolean;
+    readAt?: string;
+    managerNotice: {
+      id?: string;
+      title?: string;
+      content?: string;
+      createdAt?: string;
+      userId?: number;
+    };
     type?: NoticeIconItemType;
   };
 

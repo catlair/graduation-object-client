@@ -7,3 +7,4 @@ export * as login from './login';
 export * as upload from './upload';
 export * as paper from './paper';
 export * as user from './user';
+export * as notice from './notice';

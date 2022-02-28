@@ -77,12 +77,15 @@ const TableList: React.FC = () => {
       render: (_, record) => {
         return record.status === PaperEnum.REJECT
           ? [
+              <Link key="config" to={`/paper/detail/${record.id}`}>
+                查看试卷
+              </Link>,
               <Link key="config" to={`/paper/edit/${record.id}`}>
                 重新上传
               </Link>,
             ]
           : [
-              <Link key="config" to={`/paper/edit/${record.id}`}>
+              <Link key="config" to={`/paper/detail/${record.id}`}>
                 查看试卷
               </Link>,
             ];
