@@ -39,7 +39,12 @@ const CheckList: React.FC = () => {
       title: '备注',
       dataIndex: 'remark',
       hideInForm: true,
-      renderText: (val: string) => (val.length > 20 ? `${val.slice(0, 20)}...` : val),
+      renderText: (val: string) => {
+        if (val) {
+          return val.length > 20 ? `${val.slice(0, 20)}...` : val;
+        }
+        return '';
+      },
     },
     {
       title: '审核完成时间',

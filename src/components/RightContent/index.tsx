@@ -35,7 +35,7 @@ const Notice = ({ data, refresh }) => {
   return (
     <>
       <NoticeIcon
-        count={allList.length}
+        count={unreadList.length}
         onClear={async (title: string, key: string) => {
           if (key === 'all') {
             await deleteNoticeAll();
