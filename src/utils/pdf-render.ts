@@ -10,7 +10,7 @@ export const renderInIframe = (pdfBytes: Blob | BytesType) => {
   return URL.createObjectURL(blob);
 };
 
-export const pdfPreview = async (filename: string = '') => {
+export const pdfPreview = async (filename: string = '', titlename = '') => {
   const tempArr = filename.split('.');
   tempArr[tempArr.length - 1] = 'pdf';
   const name = tempArr.join('.');
@@ -21,7 +21,7 @@ export const pdfPreview = async (filename: string = '') => {
     reader.onload = () => resolve(reader.result);
   });
 
-  const pdfWindow = window.open('about:blank', `查看文件 - ${filename}`);
+  const pdfWindow = window.open('about:blank', `查看 - ${titlename || filename}`);
   if (isNull(pdfWindow)) {
     message.error('请允许弹窗');
     return;
@@ -36,5 +36,5 @@ export const pdfPreview = async (filename: string = '') => {
   }
 
   pdfWindow.document.body.style.margin = '0';
-  pdfWindow.document.title = `查看文件 - ${filename}`;
+  pdfWindow.document.title = `查看 - ${titlename || filename}`;
 };
