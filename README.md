@@ -1,7 +1,6 @@
-# Ant Design Pro
+# 学院试卷管理系统
 
-这个项目使用 [Ant Design Pro](https://pro.ant.design) 初始化。下面是如何使用的快速指南。
+## 参见
 
-## 更多
-
-你可以在 [Ant Design Pro](https://pro.ant.design) 中查看更多文档。欢迎给我们反馈问题 [github](https://github.com/ant-design/ant-design-pro)。
+视频演示：https://www.bilibili.com/video/BV1nL411N78N/  
+后端项目地址：https://github.com/catlair/graduation-object-server
