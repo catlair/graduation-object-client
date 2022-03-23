@@ -8,7 +8,7 @@ import { PaperEnum } from '@/enums/paper';
 import { PicturesWall } from './components/PicturesWall';
 import type { UploadFile } from 'antd/lib/upload/interface';
 import { createCheck } from '@/services/check';
-import PaperInfoViwe from '@/components/paperInfoViwe';
+import PaperInfoViwe from '@/components/PaperInfoViwe';
 
 type FormType = {
   content: string;

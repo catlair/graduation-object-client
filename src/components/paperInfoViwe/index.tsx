@@ -1,20 +1,8 @@
 import { getPaper } from '@/services/paper';
-import { getFile } from '@/services/upload';
-import { download } from '@/utils/download';
-import { pdfPreview } from '@/utils/pdf-render';
-import { Button, Descriptions, message } from 'antd';
+import { Descriptions } from 'antd';
 import { useEffect, useState } from 'react';
 import { useRouteMatch } from 'umi';
-
-const handleDownload = async (filename: string, savename?: string) => {
-  const res = await getFile(filename);
-  message.success('获取成功，请等待自动下载！');
-  if (savename) {
-    download(res, `${savename}.${filename.split('.').at(-1)}`);
-    return;
-  }
-  download(res, filename);
-};
+import PaperDescription from './PaperDescription';
 
 export default () => {
   const {
@@ -40,24 +28,7 @@ export default () => {
             <Descriptions.Item label="学院">{paper.college}</Descriptions.Item>
             <Descriptions.Item label="课程">{paper.course}</Descriptions.Item>
           </Descriptions>
-          <Descriptions title="试卷" bordered style={{ margin: '12px auto' }}>
-            <Descriptions.Item label="A 卷">
-              <Button type="link" onClick={() => pdfPreview(paper.aName, paper.course + 'A卷')}>
-                预览
-              </Button>
-              <Button type="link" onClick={() => handleDownload(paper.aName, paper.course)}>
-                下载
-              </Button>
-            </Descriptions.Item>
-            <Descriptions.Item label="B 卷">
-              <Button type="link" onClick={() => pdfPreview(paper.bName, paper.course + 'B卷')}>
-                预览
-              </Button>
-              <Button type="link" onClick={() => handleDownload(paper.bName, paper.course)}>
-                下载
-              </Button>
-            </Descriptions.Item>
-          </Descriptions>
+          <PaperDescription paper={paper} style={{ margin: '12px auto' }} />
         </>
       )}
     </>

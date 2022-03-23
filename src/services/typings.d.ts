@@ -98,6 +98,8 @@ declare namespace API {
   type PaperLife = {
     id: string;
     paperId: string;
+    aName: string;
+    bName: string;
     userId: number;
     status: 'CREATE' | 'UPDATE' | 'PASS' | 'REJECT' | 'PRINT';
     content?: string;

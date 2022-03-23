@@ -2,6 +2,7 @@ import { Mimetype } from '@/enums/mimetype';
 import { getFile } from '@/services/upload';
 import { message } from 'antd';
 import { isNull } from 'lodash';
+import { download } from './download';
 
 export type BytesType = string | ArrayBuffer | Uint8Array;
 
@@ -37,4 +38,14 @@ export const pdfPreview = async (filename: string = '', titlename = '') => {
 
   pdfWindow.document.body.style.margin = '0';
   pdfWindow.document.title = `查看 - ${titlename || filename}`;
+};
+
+export const handleDownload = async (filename: string, savename?: string) => {
+  const res = await getFile(filename);
+  message.success('获取成功，请等待自动下载！');
+  if (savename) {
+    download(res, `${savename}.${filename.split('.').at(-1)}`);
+    return;
+  }
+  download(res, filename);
 };

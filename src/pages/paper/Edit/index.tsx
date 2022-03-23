@@ -6,17 +6,19 @@ import { history, useRouteMatch } from 'umi';
 import ProForm, { ProFormGroup, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, message, Upload } from 'antd';
-import { paperTypes } from '@/enums/mimetype';
+import { Mimetype, paperTypes } from '@/enums/mimetype';
 import { uploadPaperUpdate } from '@/services/upload';
+import { useState } from 'react';
 
 interface UploadButtonProps {
-  feildName: string;
+  feildName: 'a' | 'b';
 }
 
 export default () => {
   const {
     params: { id: paperId },
   } = useRouteMatch<{ id: string }>();
+  const [updateFields, setUpdateFields] = useState({});
 
   const UploadButton = (props: UploadButtonProps) => {
     return (
@@ -29,6 +31,7 @@ export default () => {
           }
           uploadPaperUpdate(file, props.feildName, paperId)
             .then(() => {
+              setUpdateFields({ ...updateFields, [props.feildName]: `.${Mimetype[file.type]}` });
               message.success(`${file.name} 上传成功`);
             })
             .catch(() => {
@@ -51,7 +54,7 @@ export default () => {
             // @ts-ignore
             const { content } = values;
             try {
-              await patchPaper(paperId, content);
+              await patchPaper(paperId, { content, fields: updateFields });
               history.push('/paper/list');
               message.success('修改成功');
             } catch (error) {

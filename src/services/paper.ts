@@ -50,12 +50,20 @@ export async function getPaper(id: string, options?: Record<string, any>) {
 }
 
 /** 更新试卷 Patch /paper/:id */
-export async function patchPaper(id: string, content: string, options?: Record<string, any>) {
+export async function patchPaper(
+  id: string,
+  data: {
+    fields: {
+      a?: string;
+      b?: string;
+    };
+    content: string;
+  },
+  options?: Record<string, any>,
+) {
   return request<API.Paper>(`/paper/${id}`, {
     method: 'PATCH',
-    data: {
-      content,
-    },
+    data,
     ...(options || {}),
   });
 }

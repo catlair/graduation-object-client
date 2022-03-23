@@ -2,7 +2,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import ProCard from '@ant-design/pro-card';
 import { useRouteMatch } from 'umi';
 import PaperLife from './components/PaperLife';
-import PaperInfoViwe from '@/components/paperInfoViwe';
+import PaperInfoViwe from '@/components/PaperInfoViwe';
 
 export default () => {
   const {
