@@ -104,6 +104,8 @@ export default () => {
       editable: (_text, record) => {
         return !record.name;
       },
+      sorter: (a, b) => a.id! - b.id!,
+      sortDirections: ['descend', 'ascend'],
       width: '15%',
     },
     {

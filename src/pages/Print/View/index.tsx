@@ -5,6 +5,7 @@ import React from 'react';
 import Setting from './components/Setting';
 import PDFViewer from './components/Viewer';
 import { slantWatermark } from '../utils';
+import { getFileNameAndExt } from '@/utils/string';
 import { getFile } from '@/services/upload';
 
 export default class Component extends React.Component {
@@ -51,10 +52,11 @@ export default class Component extends React.Component {
   }
 
   async modifyPdf(values: Partial<WaterDrawTextParams> = {}) {
-    const { color, fontsize, rotate, watermark } = { ...this.state, ...values };
+    const { color, fontsize, rotate, watermark, page } = { ...this.state, ...values };
+
     const existingPdfBytes = await getFile(
       // @ts-ignore
-      `${this.props.match.params.id}${this.state.page}.pdf`,
+      `${getFileNameAndExt(this.props.location.state[page]).name}.pdf`,
       'paper',
       'arrayBuffer',
     );

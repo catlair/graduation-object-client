@@ -8,6 +8,7 @@ import ProDescriptions from '@ant-design/pro-descriptions';
 import { Link } from 'umi';
 import { getPapersByCollege } from '@/services/paper';
 import { PaperEnum } from '@/enums/paper';
+import { sortByTimeString } from '@/utils/time';
 
 const CheckList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -50,6 +51,8 @@ const CheckList: React.FC = () => {
       title: '审核完成时间',
       dataIndex: 'updatedAt',
       valueType: 'dateTime',
+      sorter: (a, b) => sortByTimeString(a.updatedAt, b.updatedAt),
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: '操作',
@@ -59,7 +62,10 @@ const CheckList: React.FC = () => {
         return [
           <Link
             key="config"
-            to={`/print/view/${encodeURIComponent(`${record.teacherId}$${record.course}$`)}`}
+            to={{
+              pathname: `/print/view/${record.id}`,
+              state: { a: record.aName, b: record.bName },
+            }}
           >
             打印试卷
           </Link>,

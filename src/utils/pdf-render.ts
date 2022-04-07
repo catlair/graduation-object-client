@@ -3,6 +3,7 @@ import { getFile } from '@/services/upload';
 import { message } from 'antd';
 import { isNull } from 'lodash';
 import { download } from './download';
+import { getFileNameAndExt } from './string';
 
 export type BytesType = string | ArrayBuffer | Uint8Array;
 
@@ -12,9 +13,7 @@ export const renderInIframe = (pdfBytes: Blob | BytesType) => {
 };
 
 export const pdfPreview = async (filename: string = '', titlename = '') => {
-  const tempArr = filename.split('.');
-  tempArr[tempArr.length - 1] = 'pdf';
-  const name = tempArr.join('.');
+  const name = getFileNameAndExt(filename).name + '.pdf';
   const res = await getFile(name);
   const src = await new Promise((resolve) => {
     const reader = new FileReader();

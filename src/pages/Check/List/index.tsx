@@ -8,6 +8,7 @@ import ProDescriptions from '@ant-design/pro-descriptions';
 import { Link } from 'umi';
 import { getPapersByCollege } from '@/services/paper';
 import { PaperEnum } from '@/enums/paper';
+import { sortByTimeString } from '@/utils/time';
 
 const CheckList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -57,6 +58,8 @@ const CheckList: React.FC = () => {
           status: 'Default',
         },
       },
+      filters: true,
+      onFilter: (value, record) => record.status === value,
     },
     {
       title: '备注',
@@ -73,6 +76,8 @@ const CheckList: React.FC = () => {
       title: '状态变更时间',
       dataIndex: 'updatedAt',
       valueType: 'dateTime',
+      sorter: (a, b) => sortByTimeString(a.updatedAt, b.updatedAt),
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: '操作',

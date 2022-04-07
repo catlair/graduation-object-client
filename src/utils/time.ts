@@ -19,3 +19,10 @@ export function getGreeting(name: string = '老师') {
   }
   return `夜深了，${name},早点休息吧！`;
 }
+
+/**
+ * sort by time
+ */
+export function sortByTimeString(a: Date | string, b: Date | string) {
+  return new Date(a).getTime() - new Date(b).getTime();
+}

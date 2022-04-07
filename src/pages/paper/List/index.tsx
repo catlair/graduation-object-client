@@ -9,6 +9,7 @@ import ProDescriptions from '@ant-design/pro-descriptions';
 import { history, Link } from 'umi';
 import { getPapersByTeacher } from '@/services/paper';
 import { PaperEnum } from '@/enums/paper';
+import { sortByTimeString } from '@/utils/time';
 
 const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -58,6 +59,8 @@ const TableList: React.FC = () => {
           status: 'Default',
         },
       },
+      filters: true,
+      onFilter: (value, record) => record.status === value,
     },
     {
       title: '备注',
@@ -74,6 +77,8 @@ const TableList: React.FC = () => {
       title: '状态变更时间',
       dataIndex: 'updatedAt',
       valueType: 'dateTime',
+      sorter: (a, b) => sortByTimeString(a.updatedAt, b.updatedAt),
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: '操作',
