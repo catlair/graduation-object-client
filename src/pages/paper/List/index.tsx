@@ -10,27 +10,18 @@ import { history, Link } from 'umi';
 import { getPapersByTeacher } from '@/services/paper';
 import { PaperEnum } from '@/enums/paper';
 import { sortByTimeString } from '@/utils/time';
+import useColumnSearch from '@/hooks/useColumnSearch';
 
 const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.Paper>();
+  const courseSearchProps = useColumnSearch('course');
 
   const columns: ProColumns<API.Paper>[] = [
     {
       title: '课程名称',
       dataIndex: 'course',
-      render: (dom, entity) => {
-        return (
-          <a
-            onClick={() => {
-              setCurrentRow(entity);
-              setShowDetail(true);
-            }}
-          >
-            {dom}
-          </a>
-        );
-      },
+      ...courseSearchProps,
     },
     {
       title: '学院',

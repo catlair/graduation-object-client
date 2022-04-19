@@ -9,6 +9,7 @@ import { getColleges } from '@/services/api';
 import { createUser, getUsers, updateUser } from '@/services/user';
 import { isEqual } from 'lodash';
 import { randomPassword } from '@/utils/string';
+import useColumnSearch from '@/hooks/useColumnSearch';
 
 type User = Partial<Omit<API.User, 'password'>>;
 
@@ -86,6 +87,8 @@ export default () => {
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [dataSource, setDataSource] = useState<User[]>([]);
   const [position, setPosition] = useState<'top' | 'bottom' | 'hidden'>('bottom');
+  const emailSearchProps = useColumnSearch('email');
+  const nameSearchProps = useColumnSearch('name');
 
   const columns: ProColumns<User>[] = [
     {
@@ -123,6 +126,7 @@ export default () => {
         };
       },
       width: '15%',
+      ...emailSearchProps,
     },
     {
       title: '用户名',
@@ -133,6 +137,7 @@ export default () => {
           rules: [{ required: true, message: '此项为必填项' }],
         };
       },
+      ...nameSearchProps,
     },
     {
       title: '学院',
