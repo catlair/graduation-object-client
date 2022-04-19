@@ -146,6 +146,17 @@ export default () => {
       renderFormItem(_, { isEditable }) {
         return isEditable ? <CollegeSelect /> : null;
       },
+      valueEnum: {
+        建筑与土木工程学院: '建筑与土木工程学院',
+        建筑管理学院: '建筑管理学院',
+        电气工程与智能制造学院: '电气工程与智能制造学院',
+        人工智能与大数据学院: '人工智能与大数据学院',
+        经济管理学院: '经济管理学院',
+        艺术与传媒学院: '艺术与传媒学院',
+        人文学院: '人文学院',
+      },
+      filters: true,
+      onFilter: (value, record) => value === record.college,
     },
     {
       title: '角色',
@@ -160,6 +171,9 @@ export default () => {
           rules: [{ required: true, message: '此项为必填项' }],
         };
       },
+      valueEnum: RoleLabels,
+      filters: true,
+      onFilter: (value, record) => record.roles?.includes(value as string) || false,
     },
     {
       title: '操作',
@@ -279,4 +293,9 @@ function getChangedValues(data, newData) {
     }
   });
   return changedData;
+}
+
+async function getCollegesEnum() {
+  const data = await getColleges();
+  return data.map((item) => ({ label: item.name, value: item.name }));
 }

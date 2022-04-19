@@ -85,9 +85,13 @@ const CheckList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => {
         return record.status !== PaperEnum.WAITING
-          ? [<span key="config">已操作</span>]
+          ? [
+              <Link key="detail" to={`/paper/detail/${record.id}`}>
+                查看试卷
+              </Link>,
+            ]
           : [
-              <Link key="config" to={`/check/operation/${record.id}`}>
+              <Link key="operation" to={`/check/operation/${record.id}`}>
                 审核试卷
               </Link>,
             ];
