@@ -5,36 +5,31 @@ import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
-import { Link } from 'umi';
+import { Link, useModel } from 'umi';
 import { getPapersByCollege } from '@/services/paper';
 import { PaperEnum } from '@/enums/paper';
 import { sortByTimeString } from '@/utils/time';
+import useColumnSearch from '@/hooks/useColumnSearch';
 
 const CheckList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.Paper>();
+  const courseSearchProps = useColumnSearch('course', { setCurrentRow, setShowDetail });
+  const { colleges } = useModel('list');
 
   const columns: ProColumns<API.Paper>[] = [
     {
       title: '课程名称',
       dataIndex: 'course',
-      render: (dom, entity) => {
-        return (
-          <a
-            onClick={() => {
-              setCurrentRow(entity);
-              setShowDetail(true);
-            }}
-          >
-            {dom}
-          </a>
-        );
-      },
+      ...courseSearchProps,
     },
     {
       title: '学院',
       dataIndex: 'college',
       valueType: 'textarea',
+      valueEnum: colleges,
+      filters: true,
+      onFilter: (value, record) => value === record.college,
     },
     {
       title: '状态',

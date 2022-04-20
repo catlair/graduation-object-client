@@ -10,6 +10,7 @@ import { createUser, getUsers, updateUser } from '@/services/user';
 import { isEqual } from 'lodash';
 import { randomPassword } from '@/utils/string';
 import useColumnSearch from '@/hooks/useColumnSearch';
+import { useModel } from 'umi';
 
 type User = Partial<Omit<API.User, 'password'>>;
 
@@ -89,6 +90,7 @@ export default () => {
   const [position, setPosition] = useState<'top' | 'bottom' | 'hidden'>('bottom');
   const emailSearchProps = useColumnSearch('email');
   const nameSearchProps = useColumnSearch('name');
+  const { colleges } = useModel('list');
 
   const columns: ProColumns<User>[] = [
     {
@@ -151,15 +153,7 @@ export default () => {
       renderFormItem(_, { isEditable }) {
         return isEditable ? <CollegeSelect /> : null;
       },
-      valueEnum: {
-        建筑与土木工程学院: '建筑与土木工程学院',
-        建筑管理学院: '建筑管理学院',
-        电气工程与智能制造学院: '电气工程与智能制造学院',
-        人工智能与大数据学院: '人工智能与大数据学院',
-        经济管理学院: '经济管理学院',
-        艺术与传媒学院: '艺术与传媒学院',
-        人文学院: '人文学院',
-      },
+      valueEnum: colleges,
       filters: true,
       onFilter: (value, record) => value === record.college,
     },

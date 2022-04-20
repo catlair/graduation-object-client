@@ -6,7 +6,7 @@ import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
-import { history, Link } from 'umi';
+import { history, Link, useModel } from 'umi';
 import { getPapersByTeacher } from '@/services/paper';
 import { PaperEnum } from '@/enums/paper';
 import { sortByTimeString } from '@/utils/time';
@@ -15,7 +15,8 @@ import useColumnSearch from '@/hooks/useColumnSearch';
 const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.Paper>();
-  const courseSearchProps = useColumnSearch('course');
+  const courseSearchProps = useColumnSearch('course', { setCurrentRow, setShowDetail });
+  const { colleges } = useModel('list');
 
   const columns: ProColumns<API.Paper>[] = [
     {
@@ -27,6 +28,9 @@ const TableList: React.FC = () => {
       title: '学院',
       dataIndex: 'college',
       valueType: 'textarea',
+      valueEnum: colleges,
+      filters: true,
+      onFilter: (value, record) => value === record.college,
     },
     {
       title: '状态',
