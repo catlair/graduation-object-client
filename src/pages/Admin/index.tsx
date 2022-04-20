@@ -293,8 +293,3 @@ function getChangedValues(data, newData) {
   });
   return changedData;
 }
-
-async function getCollegesEnum() {
-  const data = await getColleges();
-  return data.map((item) => ({ label: item.name, value: item.name }));
-}
