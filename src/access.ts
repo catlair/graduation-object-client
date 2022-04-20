@@ -5,14 +5,22 @@ import { Role } from '@/enums/role.enum';
  * */
 export default function access(initialState: { currentUser?: API.CurrentUser | undefined }) {
   const { currentUser } = initialState || {};
-  const roles = currentUser && currentUser.roles;
+  const roles = currentUser && currentUser.roles,
+    canAdmin = roles && roles.includes(Role.ADMIN),
+    canTeacher = roles && roles.includes(Role.TEACHER),
+    canViceDirector = roles && roles.includes(Role.VICE_DIRECTOR),
+    canDirector = roles && roles.includes(Role.DIRECTOR),
+    canSecretary = roles && roles.includes(Role.SECRETARY),
+    canDirectors = canViceDirector || canDirector,
+    canViewPaper = canTeacher || canDirectors || canSecretary;
 
   return {
-    canAdmin: roles?.includes(Role.ADMIN),
-    canTeacher: roles?.includes(Role.TEACHER),
-    canViceDirector: roles?.includes(Role.VICE_DIRECTOR),
-    canDirector: roles?.includes(Role.DIRECTOR),
-    canSecretary: roles?.includes(Role.SECRETARY),
-    canDirectors: roles?.includes(Role.DIRECTOR) || roles?.includes(Role.VICE_DIRECTOR),
+    canAdmin,
+    canTeacher,
+    canViceDirector,
+    canDirector,
+    canSecretary,
+    canDirectors,
+    canViewPaper,
   };
 }

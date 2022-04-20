@@ -96,6 +96,7 @@ export default [
         path: '/paper/detail/:id',
         component: './paper/Detail',
         hideInMenu: true,
+        access: 'canViewPaper',
       },
       {
         component: './404',
