@@ -9,6 +9,7 @@ import styles from './index.less';
 import { setTokens } from '@/utils/token';
 import { validatorLogin } from './utils';
 import CaptchaInput from './components/CaptchaInput';
+import { getGreeting } from '@/utils/time';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -68,8 +69,8 @@ const Login: React.FC = () => {
       <div className={styles.content}>
         <LoginForm
           logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
-          subTitle={'Ant Design 是西湖区最具影响力的 Web 设计规范'}
+          title="Paper Management OS"
+          subTitle={getGreeting()}
           initialValues={{
             autoLogin: true,
           }}
