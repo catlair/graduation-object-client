@@ -34,15 +34,43 @@ const LoginMessage: React.FC<{
   />
 );
 
+interface LoginValueType {
+  username?: string;
+  password?: string;
+  img_captcha?: {
+    code: string;
+    key: string;
+  };
+  mail_captcha?: string;
+  autoLogin?: boolean;
+  email?: string;
+}
+
 const Login: React.FC = () => {
   const [userLoginState, setUserLoginState] = useState({ status: '', errorMessage: '' });
   const [type, setType] = useState<string>('account');
   const { setInitialState } = useModel('@@initialState');
 
-  const handleSubmit = async (values: API.LoginParams) => {
+  const handleSubmit = async (values: LoginValueType) => {
+    let params: any;
+    if (type === 'account') {
+      params = {
+        username: values.username,
+        password: values.password,
+        captcha: values.img_captcha,
+        type,
+      };
+    } else {
+      params = {
+        email: values.email,
+        captcha: values.mail_captcha,
+        type,
+      };
+    }
+
     try {
       // 登录;
-      const data = await validatorLogin({ ...values, type });
+      const data = await validatorLogin(params);
 
       if (!data) {
         message.error('登录失败，请重试！');
@@ -86,7 +114,7 @@ const Login: React.FC = () => {
             autoLogin: true,
           }}
           onFinish={async (values) => {
-            await handleSubmit(values as API.LoginParams);
+            await handleSubmit(values);
           }}
         >
           <Tabs activeKey={type} onChange={setType}>
@@ -132,7 +160,7 @@ const Login: React.FC = () => {
                 ]}
               />
               <Form.Item
-                name="captcha"
+                name="img_captcha"
                 rules={[
                   {
                     required: true,
@@ -181,7 +209,7 @@ const Login: React.FC = () => {
                   }
                   return '获取验证码';
                 }}
-                name="captcha"
+                name="mail_captcha"
                 phoneName="email"
                 rules={[
                   {

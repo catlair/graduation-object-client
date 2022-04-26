@@ -58,7 +58,7 @@ const CaptchaInput: React.FC<CaptchaInputProps> = ({ value = {}, onChange }) => 
       <Input
         size="large"
         prefix={<SafetyCertificateOutlined />}
-        placeholder="请输入验证码"
+        placeholder="请输入验证码！"
         onChange={onChangeInput}
         style={{
           width: '75%',
@@ -67,18 +67,16 @@ const CaptchaInput: React.FC<CaptchaInputProps> = ({ value = {}, onChange }) => 
           verticalAlign: 'middle',
         }}
       />
-      <span
-        className="ant-input-affix-wrapper-lg"
-        title="点击刷新验证码"
-        style={{
-          display: 'inline-block',
-          width: '40%',
-          background: `url(${captcha.img}) no-repeat`,
-          cursor: 'pointer',
-        }}
-        onClick={onClickImage}
-      >
-        <span className="ant-input" style={{ padding: '0', border: '0' }} />
+      <span>
+        <img
+          src={captcha.img}
+          style={{
+            cursor: 'pointer',
+          }}
+          onClick={onClickImage}
+          alt="验证码"
+          title="请输入验证码！"
+        />
       </span>
     </div>
   );
