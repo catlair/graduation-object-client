@@ -10,6 +10,7 @@ import { setTokens, storage } from '@/utils/token';
 import { validatorLogin } from './utils';
 import CaptchaInput from './components/CaptchaInput';
 import { getGreeting } from '@/utils/time';
+import ForgetPasswordModal from './components/ForgetPassword';
 
 function setAutoLogin(autoLogin) {
   if (autoLogin) {
@@ -258,13 +259,7 @@ const Login: React.FC = () => {
             <ProFormCheckbox noStyle name="autoLogin">
               自动登录
             </ProFormCheckbox>
-            <a
-              style={{
-                float: 'right',
-              }}
-            >
-              忘记密码 ?
-            </a>
+            <ForgetPasswordModal />
           </div>
         </LoginForm>
       </div>
