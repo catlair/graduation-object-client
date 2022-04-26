@@ -166,6 +166,15 @@ const Login: React.FC = () => {
                     required: true,
                     message: '验证码是必填项！',
                   },
+                  {
+                    validator: (_rule, value) => {
+                      if (Number.isInteger(Number(value.code))) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject('验证码格式不正确！');
+                    },
+                    validateTrigger: 'onBlur',
+                  },
                 ]}
               >
                 <CaptchaInput />
@@ -215,6 +224,19 @@ const Login: React.FC = () => {
                   {
                     required: true,
                     message: '验证码是必填项！',
+                  },
+                  {
+                    validator: (_rule, value) => {
+                      if (Number.isInteger(Number(value))) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject('验证码格式不正确！');
+                    },
+                  },
+                  {
+                    len: 6,
+                    message: '验证码长度为 6 位！',
+                    validateTrigger: 'onBlur',
                   },
                 ]}
                 onGetCaptcha={async (email) => {
