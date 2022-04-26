@@ -6,10 +6,20 @@ import { history, useModel } from 'umi';
 import Footer from '@/components/Footer';
 import { getEmailCaptcha } from '@/services/login';
 import styles from './index.less';
-import { setTokens } from '@/utils/token';
+import { setTokens, storage } from '@/utils/token';
 import { validatorLogin } from './utils';
 import CaptchaInput from './components/CaptchaInput';
 import { getGreeting } from '@/utils/time';
+
+function setAutoLogin(autoLogin) {
+  if (autoLogin) {
+    storage.changeStorageType('localStorage');
+    window.localStorage.setItem('autoLogin', '1');
+  } else {
+    storage.changeStorageType('sessionStorage');
+    window.localStorage.removeItem('autoLogin');
+  }
+}
 
 const LoginMessage: React.FC<{
   content: string;
@@ -40,6 +50,7 @@ const Login: React.FC = () => {
       }
 
       message.success('登录成功！');
+      setAutoLogin(values.autoLogin);
       setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
       await setInitialState((s: any) => ({ ...s, currentUser: data.user }));
 

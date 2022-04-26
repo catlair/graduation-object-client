@@ -1,5 +1,7 @@
 /**
  * 下载文件
+ * @param res 资源二进制数据
+ * @param filename 文件名
  */
 export const download = (res: any, filename: string) => {
   const blob = new Blob([res], {

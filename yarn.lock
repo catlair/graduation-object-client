@@ -6744,7 +6744,7 @@ cross-spawn@^5.0.1:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-crypto-browserify@^3.11.0:
+crypto-browserify@^3.11.0, crypto-browserify@^3.12.0:
   version "3.12.0"
   resolved "https://registry.npmmirror.com/crypto-browserify/-/crypto-browserify-3.12.0.tgz"
   integrity sha512-fz4spIh+znjO2VjL+IdhEpRJ3YN6sMzITSBijk6FK2UvTqruSQW+/cCZTSNsMiZNvUeq0CqurF+dAbyiGOY6Wg==
@@ -6765,6 +6765,11 @@ crypto-js@^3.1.6:
   version "3.3.0"
   resolved "https://registry.npmmirror.com/crypto-js/-/crypto-js-3.3.0.tgz"
   integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
+
+crypto-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npmmirror.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
+  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
 
 crypto-random-string@^1.0.0:
   version "1.0.0"
@@ -7624,6 +7629,14 @@ encoding@^0.1.11:
   integrity sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==
   dependencies:
     iconv-lite "^0.6.2"
+
+encrypt-storage@^2.2.10:
+  version "2.2.10"
+  resolved "https://registry.npmmirror.com/encrypt-storage/-/encrypt-storage-2.2.10.tgz#80a0071b137f786e7b8dff3871b4eaad15b4454e"
+  integrity sha512-3Z2gD+kBQYrFXvofNzLB6p5kMuoq9wHTGrR6srJoUhMrbWSbpoCsOAd0pfCiVJ2VS+5rbZzZXNCjhB1s4uykXA==
+  dependencies:
+    crypto-browserify "^3.12.0"
+    crypto-js "^4.1.1"
 
 end-of-stream@^1.1.0, end-of-stream@^1.4.1:
   version "1.4.4"

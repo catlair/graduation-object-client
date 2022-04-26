@@ -12,6 +12,11 @@ export const renderInIframe = (pdfBytes: Blob | BytesType) => {
   return URL.createObjectURL(blob);
 };
 
+/**
+ * 新窗口预览 PDF
+ * @param filename 文件名
+ * @param titlename 预览窗口标题名
+ */
 export const pdfPreview = async (filename: string = '', titlename = '') => {
   const name = getFileNameAndExt(filename).name + '.pdf';
   const res = await getFile(name);
@@ -31,7 +36,7 @@ export const pdfPreview = async (filename: string = '', titlename = '') => {
     // Firefox 使用
     pdfWindow.document.write(iframe);
   } else {
-    //  chrome 使用 write 方法可能会一致转圈，故使用 innerHTML
+    //  chrome 使用 write 方法可能会一直转圈，故使用 innerHTML
     pdfWindow.document.body.innerHTML = iframe;
   }
 

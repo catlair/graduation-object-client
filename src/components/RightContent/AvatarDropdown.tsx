@@ -7,7 +7,7 @@ import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import { outLogin } from '@/services/login';
 import type { MenuInfo } from 'rc-menu/lib/interface';
-import { getRefreshToken, setTokens } from '@/utils/token';
+import { getRefreshToken, removeTokens } from '@/utils/token';
 import { loginPath } from '@/constant';
 
 export type GlobalHeaderRightProps = {
@@ -20,7 +20,7 @@ export type GlobalHeaderRightProps = {
 const loginOut = async () => {
   const token = getRefreshToken();
   await outLogin(token);
-  setTokens({});
+  removeTokens();
   message.success('退出成功！');
   const { query = {}, search, pathname } = history.location;
   const { redirect } = query;
