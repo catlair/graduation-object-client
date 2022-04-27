@@ -26,6 +26,7 @@ export default () => {
     params: { id: paperId },
   } = useRouteMatch<{ id: string }>();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [selectValue, setSelectValue] = useState<string>(PaperEnum.PASS);
 
   return (
     <PageContainer>
@@ -64,13 +65,21 @@ export default () => {
               ];
             },
           }}
+          initialValues={{
+            content: '',
+            useMode: { label: '符合要求', value: PaperEnum.PASS },
+          }}
+          onValuesChange={(values) => {
+            if (Reflect.has(values, 'useMode')) {
+              setSelectValue(values.useMode.value);
+            }
+          }}
         >
           <ProFormSelect
             width="md"
             fieldProps={{
               labelInValue: true,
             }}
-            initialValue={{ label: '符合要求', value: PaperEnum.PASS }}
             options={[
               { label: '符合要求', value: PaperEnum.PASS },
               { label: '不符合要求', value: PaperEnum.REJECT },
@@ -90,7 +99,7 @@ export default () => {
             placeholder="请输入备注"
             rules={[
               {
-                required: true,
+                required: selectValue === PaperEnum.REJECT,
               },
             ]}
           />
