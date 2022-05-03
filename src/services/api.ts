@@ -12,6 +12,6 @@ export async function currentUser(options?: Record<string, any>) {
 export async function getColleges(options?: Record<string, any>) {
   return request<API.College[]>('/college', {
     method: 'GET',
-    ...(options || { cache: 'force-cache' }),
+    ...(options || {}),
   });
 }

@@ -61,10 +61,6 @@ export const request: RequestConfig = {
     async function transform(ctx, next) {
       await next();
       const body = ctx.res;
-      // TEMP: 临时设置，应对Mock数据
-      if (/^\/api/.test(ctx.req.url)) {
-        return;
-      }
 
       if (ctx.req.options.noTransform) {
         return;
@@ -75,7 +71,7 @@ export const request: RequestConfig = {
       }
     },
   ],
-  prefix: '/dev-api',
+  prefix: '/api',
   headers: {
     'Content-Type': 'application/json',
   },
