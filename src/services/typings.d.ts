@@ -39,7 +39,7 @@ declare namespace API {
   };
 
   type CreateUser = {
-    id: number;
+    id: string;
     email: string;
     name: string;
     password: string;
@@ -87,7 +87,7 @@ declare namespace API {
     bName: string;
     course: string;
     college: string;
-    teacherId: number;
+    teacherId: string;
     remark?: string;
     status: string;
     createdAt: Date;
@@ -100,8 +100,16 @@ declare namespace API {
     paperId: string;
     aName: string;
     bName: string;
-    userId: number;
-    status: 'CREATE' | 'UPDATE' | 'PASS' | 'REJECT' | 'PRINT';
+    userId: string;
+    status:
+      | 'CREATE'
+      | 'UPDATE'
+      | 'PENDING'
+      | 'PASSED'
+      | 'REJECTED'
+      | 'REVIEW_PASSED'
+      | 'REVIEW_REJECTED'
+      | 'PRINT';
     content?: string;
     images?: string[];
     createdAt: Date;
@@ -166,7 +174,7 @@ declare namespace API {
 
   type UpdateEmail = {
     key: string;
-    userId: number;
+    userId: string;
   };
 
   type LoginParams = {
@@ -203,7 +211,7 @@ declare namespace API {
 
   type NoticeIconItem = {
     id: string;
-    userId: number;
+    userId: string;
     noticeId: number;
     read: boolean;
     readAt?: string;
@@ -212,7 +220,7 @@ declare namespace API {
       title?: string;
       content?: string;
       createdAt?: string;
-      userId?: number;
+      userId?: string;
     };
     type?: NoticeIconItemType;
   };

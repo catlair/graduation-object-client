@@ -29,10 +29,10 @@ export default () => {
       password: string;
       confirm: string;
     }>
-      title="修改邮箱"
+      title="修改密码"
       formRef={formRef}
       width={520}
-      trigger={<a>修改</a>}
+      trigger={<a>修改密码</a>}
       submitter={{
         render: (props, defaultDoms) => {
           return [

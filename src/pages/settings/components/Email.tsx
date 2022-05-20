@@ -15,7 +15,7 @@ export default ({ email }) => {
       title="修改邮箱"
       formRef={formRef}
       width={520}
-      trigger={<a>修改</a>}
+      trigger={<a>修改邮箱</a>}
       submitter={{
         render: (props, defaultDoms) => {
           return [

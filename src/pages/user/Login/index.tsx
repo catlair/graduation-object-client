@@ -112,7 +112,7 @@ const Login: React.FC = () => {
           title="Paper Management OS"
           subTitle={getGreeting()}
           initialValues={{
-            autoLogin: true,
+            autoLogin: window.localStorage.getItem('autoLogin') === '1',
           }}
           onFinish={async (values) => {
             await handleSubmit(values);

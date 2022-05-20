@@ -1,22 +1,32 @@
 export const PaperEnum = {
-  WAITING: 'WAITING',
-  PASS: 'PASS',
-  REJECT: 'REJECT',
+  // 待初审
+  PENDING: 'PENDING',
+  // 初审通过
+  PASSED: 'PASSED',
+  // 初审未通过
+  REJECTED: 'REJECTED',
+  // 复审通过
+  REVIEW_PASSED: 'REVIEW_PASSED',
+  // 复审未通过
+  REVIEW_REJECTED: 'REVIEW_REJECTED',
+  // 试卷已打印
   PRINT: 'PRINT',
 };
 
-export const PaperLifeEnum = {
+export const PaperLifeEnum = Object.assign({}, PaperEnum, {
+  // 创建试卷
   CREATE: 'CREATE',
+  // 重新上传
   UPDATE: 'UPDATE',
-  PASS: 'PASS',
-  REJECT: 'REJECT',
-  PRINT: 'PRINT',
-};
+});
 
 export const PaperLifeLabel = {
   CREATE: '创建',
   UPDATE: '修改',
-  PASS: '通过',
-  REJECT: '驳回',
-  PRINT: '打印',
+  PENDING: '待初审',
+  PASSED: '初审通过',
+  REJECTED: '初审未通过',
+  REVIEW_PASSED: '复审通过',
+  REVIEW_REJECTED: '复审未通过',
+  PRINT: '已打印',
 };

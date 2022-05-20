@@ -1,6 +1,6 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import ProCard from '@ant-design/pro-card';
-import { useRouteMatch, history } from 'umi';
+import { useRouteMatch, history, useModel } from 'umi';
 import ProForm, { ProFormSelect, ProFormTextArea } from '@ant-design/pro-form';
 import { Button, Collapse, message } from 'antd';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ import type { UploadFile } from 'antd/lib/upload/interface';
 import { createCheck } from '@/services/check';
 import PaperInfoViwe from '@/components/PaperInfoViwe';
 import PaperLife from '@/pages/paper/Detail/components/PaperLife';
+import { Role } from '@/enums/role.enum';
 
 const { Panel } = Collapse;
 
@@ -25,8 +26,14 @@ export default () => {
   const {
     params: { id: paperId },
   } = useRouteMatch<{ id: string }>();
+  // 导入用户信息
+  const { initialState } = useModel('@@initialState');
+  const isVice = initialState?.currentUser?.roles.includes(Role.VICE_DIRECTOR);
+  const okValue = isVice ? PaperEnum.PASSED : PaperEnum.REVIEW_PASSED;
+  const noValue = isVice ? PaperEnum.REJECTED : PaperEnum.REVIEW_REJECTED;
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [selectValue, setSelectValue] = useState<string>(PaperEnum.PASS);
+  const [selectValue, setSelectValue] = useState<string>(okValue);
+  // 结果选择
 
   return (
     <PageContainer>
@@ -67,7 +74,7 @@ export default () => {
           }}
           initialValues={{
             content: '',
-            useMode: { label: '符合要求', value: PaperEnum.PASS },
+            useMode: { label: '符合要求', value: okValue },
           }}
           onValuesChange={(values) => {
             if (Reflect.has(values, 'useMode')) {
@@ -81,8 +88,8 @@ export default () => {
               labelInValue: true,
             }}
             options={[
-              { label: '符合要求', value: PaperEnum.PASS },
-              { label: '不符合要求', value: PaperEnum.REJECT },
+              { label: '符合要求', value: okValue },
+              { label: '不符合要求', value: noValue },
             ]}
             name="useMode"
             label="审核结果"
@@ -99,7 +106,7 @@ export default () => {
             placeholder="请输入备注"
             rules={[
               {
-                required: selectValue === PaperEnum.REJECT,
+                required: selectValue === noValue,
               },
             ]}
           />

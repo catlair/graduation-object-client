@@ -10,6 +10,9 @@ export default defineConfig({
   dva: {
     hmr: true,
   },
+  devServer: {
+    https: true,
+  },
   access: {},
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout

@@ -245,13 +245,9 @@ export default () => {
               return;
             }
 
-            if (typeof rowKey !== 'number') {
-              message.warn('rowKey必须为数字');
-            }
-
             if (row.name) {
               // 更新
-              await updateUser(+rowKey, getChangedValues(row, newData));
+              await updateUser(String(rowKey), getChangedValues(row, newData));
               message.success(row.name + '更新成功');
             } else {
               // 新增
@@ -259,7 +255,7 @@ export default () => {
                 await createUser({
                   ...newData,
                   index: undefined,
-                  id: Number(newData.id) || +rowKey,
+                  id: newData.id || rowKey,
                   password: randomPassword(10),
                 } as API.CreateUser);
                 message.success('新增成功');

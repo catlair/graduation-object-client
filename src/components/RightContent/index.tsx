@@ -1,5 +1,5 @@
 import { message, Space } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useModel, useRequest } from 'umi';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
@@ -91,7 +91,7 @@ const Notice = ({ data, refresh }) => {
 
 const GlobalHeaderRight: React.FC = () => {
   const { initialState } = useModel('@@initialState');
-  const { data, refresh } = useRequest(getNotices);
+  const { data, refresh } = useRequest(getNotices, { pollingInterval: 7000 });
 
   if (!initialState || !initialState.settings) {
     return null;

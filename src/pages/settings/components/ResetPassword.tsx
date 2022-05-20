@@ -18,7 +18,7 @@ export default ({ email }) => {
       code: string;
       password: string;
     }>
-      title="修改邮箱"
+      title="重置密码"
       formRef={formRef}
       width={520}
       trigger={<a>重置密码</a>}

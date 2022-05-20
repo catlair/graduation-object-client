@@ -8,7 +8,7 @@ import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { history, Link } from 'umi';
 import { getPapersByTeacher } from '@/services/paper';
-import { PaperEnum } from '@/enums/paper';
+import { PaperEnum, PaperLifeLabel } from '@/enums/paper';
 import { sortByTimeString } from '@/utils/time';
 import useColumnSearch from '@/hooks/useColumnSearch';
 
@@ -37,17 +37,25 @@ const TableList: React.FC = () => {
       dataIndex: 'status',
       hideInForm: true,
       valueEnum: {
-        [PaperEnum.WAITING]: {
-          text: '等待审核',
+        [PaperEnum.PENDING]: {
+          text: PaperLifeLabel.PENDING,
           status: 'Processing',
         },
-        [PaperEnum.PASS]: {
-          text: '审核通过',
-          status: 'Success',
+        [PaperEnum.PASSED]: {
+          text: PaperLifeLabel.PASSED,
+          status: 'Processing',
         },
-        [PaperEnum.REJECT]: {
-          text: '审核拒绝',
+        [PaperEnum.REVIEW_PASSED]: {
+          status: 'Success',
+          text: PaperLifeLabel.REVIEW_PASSED,
+        },
+        [PaperEnum.REJECTED]: {
+          text: PaperLifeLabel.REJECTED,
           status: 'Error',
+        },
+        [PaperEnum.REVIEW_REJECTED]: {
+          status: 'Error',
+          text: PaperLifeLabel.REVIEW_REJECTED,
         },
         [PaperEnum.PRINT]: {
           text: '已打印',
@@ -80,7 +88,7 @@ const TableList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        return record.status === PaperEnum.REJECT
+        return record.status === PaperEnum.REJECTED
           ? [
               <Link key="config" to={`/paper/detail/${record.id}`}>
                 查看试卷

@@ -7,7 +7,6 @@ import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { Link } from 'umi';
 import { getPapersByCollege } from '@/services/paper';
-import { PaperEnum } from '@/enums/paper';
 import { sortByTimeString } from '@/utils/time';
 import useColumnSearch from '@/hooks/useColumnSearch';
 
@@ -74,13 +73,7 @@ const CheckList: React.FC = () => {
       <ProTable<API.Paper, API.PageParams>
         rowKey="id"
         search={false}
-        request={async () => {
-          const papers = await getPapersByCollege();
-          return {
-            ...papers,
-            data: papers.data.filter((paper) => paper.status === PaperEnum.PASS),
-          };
-        }}
+        request={getPapersByCollege}
         columns={columns}
       />
 

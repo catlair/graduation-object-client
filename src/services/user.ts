@@ -45,7 +45,7 @@ export const getUsers = (options?: Record<string, any>) => {
 };
 
 /** 更新用户 PATCH /user/:id */
-export const updateUser = (id: number, data: API.UpdateUser, options?: Record<string, any>) => {
+export const updateUser = (id: string, data: API.UpdateUser, options?: Record<string, any>) => {
   return request(`/user/${id}`, {
     method: 'PATCH',
     data,
